@@ -1,0 +1,2 @@
+model,task,ar,en,es,hi,zh
+qwen3-32b,math,0.898,1.0,0.858,1.079,0.879

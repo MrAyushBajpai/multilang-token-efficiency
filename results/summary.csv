@@ -1,0 +1,6 @@
+timestamp,run_key,model,task,language,n,n_correct,accuracy,mean_completion_tokens,median_completion_tokens,std_completion_tokens,mean_total_tokens,mean_latency_s,avg_cost_per_attempt_usd,ceff_usd
+2026-05-22T12:58:47.546711,qwen3-32b__math__en,qwen3-32b,math,en,100,78,0.78,775.98,613.0,467.11,908.18,7.021,0.000341,0.000437
+2026-05-22T13:12:22.773981,qwen3-32b__math__zh,qwen3-32b,math,zh,100,89,0.89,682.31,566.0,410.57,814.51,6.212,0.000304,0.000342
+2026-05-22T13:28:32.012545,qwen3-32b__math__hi,qwen3-32b,math,hi,100,90,0.9,837.09,723.5,397.54,969.29,7.862,0.000365,0.000405
+2026-05-22T13:42:11.297904,qwen3-32b__math__ar,qwen3-32b,math,ar,100,86,0.86,697.04,595.0,357.22,829.24,6.433,0.00031,0.000361
+2026-05-22T13:55:28.897326,qwen3-32b__math__es,qwen3-32b,math,es,100,87,0.87,666.03,567.5,320.28,798.23,6.176,0.000298,0.000343
