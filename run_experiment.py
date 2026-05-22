@@ -47,10 +47,10 @@ TASKS = ["math", "commonsense", "code"]
 REASONING_MODELS = {"qwen/qwen3-32b"}
 
 # How many problems per task per language per model
-N_SAMPLES = 50
+N_SAMPLES = 100
 
 # Temperature fixed across all runs for reproducibility
-TEMPERATURE = 0.6
+TEMPERATURE = 0.0
 
 # Retry settings
 MAX_RETRIES = 5
@@ -176,16 +176,18 @@ def check_commonsense(response_text, expected_answer):
 
 
 def check_code(response_text, expected_answer):
-    """
-    Simple check: look for the expected function/output in code block.
-    For a proper eval you'd run the code — left as a stub here.
-    """
-    import re
+    import re, subprocess, sys
     code_blocks = re.findall(r"```python(.*?)```", response_text, re.DOTALL)
     if not code_blocks:
         return False
-    # Stub: mark as 'needs_eval' for post-processing
-    return "NEEDS_EVAL"
+    try:
+        result = subprocess.run(
+            [sys.executable, "-c", code_blocks[0]],
+            timeout=5, capture_output=True, text=True
+        )
+        return expected_answer in result.stdout or result.returncode == 0
+    except Exception:
+        return False
 
 
 CHECKERS = {
