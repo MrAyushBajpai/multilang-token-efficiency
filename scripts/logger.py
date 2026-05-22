@@ -32,9 +32,10 @@ class ExperimentLogger:
 
     def save_run(self, run_key: str, records: List[Dict[str, Any]]):
         # Save raw records
-        out_path = self.results_dir / f"{run_key}.json"
+        out_path = self.results_dir / f"{run_key}.jsonl"
         with open(out_path, "w", encoding="utf-8") as f:
-            json.dump(records, f, indent=2, ensure_ascii=False)
+            for record in records:
+                f.write(json.dumps(record, ensure_ascii=False) + "\n")
 
         # Append summary row
         from scripts.metrics import compute_metrics
