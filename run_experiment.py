@@ -62,24 +62,26 @@ RETRY_BASE_DELAY = 10  # seconds
 SYSTEM_PROMPTS = {
     "math": (
         "You are a math problem solver. "
+        "You must think and respond entirely in {language} — including all reasoning steps. "
         "Solve the given problem step by step in {language}. "
         "Give your final numerical answer on the last line prefixed with 'Answer:'. "
         "Do NOT translate the final answer — keep it as a number."
     ),
     "commonsense": (
         "You are a reasoning assistant. "
-        "Answer the multiple-choice question in {language}. "
-        "Think step by step, then give your final answer as a single letter (A/B/C/D) "
+        "You must think and respond entirely in {language} — including all reasoning steps. "
+        "Answer the multiple-choice question below. "
+        "Think step by step in {language}, then give your final answer as a single letter (A/B/C/D) "
         "on the last line prefixed with 'Answer:'."
     ),
     "code": (
         "You are an expert programmer. "
-        "Solve the coding problem in {language} (natural language explanation), "
-        "but write the actual code solution in Python. "
-        "Put the code inside ```python ... ``` blocks."
+        "You must write all explanations and comments entirely in {language}. "
+        "Explain your approach and reasoning in {language}. "
+        "Write the actual code solution in Python inside ```python ... ``` blocks. "
+        "Code, variable names, and function names must remain in English — only natural language text should be in {language}."
     ),
 }
-
 
 # ── Core API call ─────────────────────────────────────────────────────────────
 
