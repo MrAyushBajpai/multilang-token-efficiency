@@ -31,10 +31,63 @@ TASK_LABELS = {"math": "Math", "commonsense": "Commonsense", "code": "Code"}
 # ── Load & process ────────────────────────────────────────────────────────────
 
 def load_summary_df(results_dir: str) -> pd.DataFrame:
-    summary_path = Path(results_dir) / "summary.csv"
-    if not summary_path.exists():
-        raise FileNotFoundError(f"No summary.csv found in {results_dir}")
-    df = pd.read_csv(summary_path)
+    """
+    Tries JSONL files first (richer data), falls back to summary.csv.
+    Aggregates per-record JSONL into per-run summary rows to match
+    the shape the rest of analyze.py expects.
+    """
+    results_path = Path(results_dir)
+    jsonl_files  = list(results_path.glob("*.jsonl"))
+
+    if jsonl_files:
+        records = []
+        for f in jsonl_files:
+            with open(f, encoding="utf-8") as fh:
+                for line in fh:
+                    line = line.strip()
+                    if line:
+                        records.append(json.loads(line))
+
+        raw = pd.DataFrame(records)
+
+        # Aggregate per (model, task, language) — same shape as summary.csv
+        df = (
+            raw.groupby(["model", "task", "language"])
+            .agg(
+                n                      = ("correct", "count"),
+                n_correct              = ("correct", lambda x: (x == True).sum()),
+                accuracy               = ("correct", lambda x: (x == True).mean()),
+                mean_completion_tokens = ("completion_tokens", "mean"),
+                median_completion_tokens = ("completion_tokens", "median"),
+                std_completion_tokens  = ("completion_tokens", "std"),
+                mean_total_tokens      = ("total_tokens", "mean"),
+                mean_latency_s         = ("latency_s", "mean"),
+            )
+            .reset_index()
+        )
+
+        # Reconstruct ceff_usd: needs avg_cost_per_attempt — pull from summary.csv
+        # if available, otherwise leave as NaN (ceff plot will be skipped gracefully)
+        summary_path = results_path / "summary.csv"
+        if summary_path.exists():
+            sdf = pd.read_csv(summary_path)[
+                ["model", "task", "language", "avg_cost_per_attempt_usd", "ceff_usd"]
+            ]
+            df = df.merge(sdf, on=["model", "task", "language"], how="left")
+        else:
+            df["avg_cost_per_attempt_usd"] = float("nan")
+            df["ceff_usd"]                 = float("nan")
+
+        print(f"  Loaded {len(records)} raw records from {len(jsonl_files)} JSONL files → {len(df)} run rows.")
+
+    else:
+        # fallback
+        summary_path = results_path / "summary.csv"
+        if not summary_path.exists():
+            raise FileNotFoundError(f"No JSONL files or summary.csv found in {results_dir}")
+        df = pd.read_csv(summary_path)
+        print(f"  Loaded {len(df)} rows from summary.csv (fallback).")
+
     df["lang_label"] = df["language"].map(LANG_LABELS)
     df["task_label"] = df["task"].map(TASK_LABELS)
     return df
