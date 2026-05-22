@@ -156,13 +156,13 @@ def _load_from_hf(task: str, n_samples: int, seed: int) -> List[Dict[str, Any]]:
     from datasets import load_dataset  # type: ignore
 
     if task == "math":
-        ds = load_dataset("lighteval/MATH", "all", split="test", trust_remote_code=True)
+        ds = load_dataset("openai/gsm8k", "main", split="test")
         ds = ds.shuffle(seed=seed).select(range(min(n_samples, len(ds))))
-        return [{"id": str(i), "question": r["problem"], "answer": r["solution"]}
+        return [{"id": str(i), "question": r["question"], "answer": r["answer"].split("####")[-1].strip()}
                 for i, r in enumerate(ds)]
 
     elif task == "commonsense":
-        ds = load_dataset("ai2_arc", "ARC-Easy", split="test", trust_remote_code=True)
+        ds = load_dataset("ai2_arc", "ARC-Easy", split="test")
         ds = ds.shuffle(seed=seed).select(range(min(n_samples, len(ds))))
         problems = []
         for i, r in enumerate(ds):
@@ -177,7 +177,7 @@ def _load_from_hf(task: str, n_samples: int, seed: int) -> List[Dict[str, Any]]:
         return problems
 
     elif task == "code":
-        ds = load_dataset("openai_humaneval", split="test", trust_remote_code=True)
+        ds = load_dataset("openai_humaneval", split="test")
         ds = ds.shuffle(seed=seed).select(range(min(n_samples, len(ds))))
         return [{"id": r["task_id"], "question": r["prompt"], "answer": r["entry_point"]}
                 for r in ds]
