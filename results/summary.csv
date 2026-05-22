@@ -12,3 +12,7 @@ timestamp,run_key,model,task,language,n,n_correct,accuracy,mean_completion_token
 2026-05-22T16:51:27.651594,llama4-scout__math__ar,llama4-scout,math,ar,100,94,0.94,201.84,188.5,76.56,333.94,1.396,8.3e-05,8.8e-05
 2026-05-22T16:55:58.738257,llama4-scout__math__es,llama4-scout,math,es,100,62,0.62,205.18,194.5,77.02,337.28,1.21,8.4e-05,0.000136
 2026-05-22T17:00:15.309880,llama4-scout__math__tr,llama4-scout,math,tr,100,90,0.9,169.75,157.5,72.53,301.85,1.065,7.2e-05,8e-05
+2026-05-22T17:43:09.496641,llama4-scout__commonsense__en,llama4-scout,commonsense,en,100,77,0.77,316.56,316.0,68.24,440.92,1.31,0.000121,0.000158
+2026-05-22T17:47:46.747142,llama4-scout__commonsense__zh,llama4-scout,commonsense,zh,100,90,0.9,319.68,325.5,76.04,444.04,1.272,0.000122,0.000136
+2026-05-22T17:52:40.219667,llama4-scout__commonsense__hi,llama4-scout,commonsense,hi,100,88,0.88,325.34,321.0,80.85,449.7,1.434,0.000124,0.000141
+2026-05-22T17:57:21.752956,llama4-scout__commonsense__ar,llama4-scout,commonsense,ar,100,86,0.86,305.44,305.5,82.47,429.8,1.315,0.000118,0.000137
