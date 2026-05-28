@@ -33,3 +33,5 @@ timestamp,run_key,model,task,language,n,n_correct,accuracy,mean_completion_token
 2026-05-28T13:28:44.216329,qwen3-32b__code__en,qwen3-32b,code,en,100,28,0.28,1872.9,2048.0,329.75,2086.64,19.19,0.000792,0.00283
 2026-05-28T15:16:46.327568,llama4-scout__commonsense__es,llama4-scout,commonsense,es,100,93,0.93,313.71,311.5,79.56,438.07,1.084,0.00012,0.000129
 2026-05-28T15:20:44.852877,llama4-scout__commonsense__tr,llama4-scout,commonsense,tr,100,94,0.94,275.65,283.5,101.35,400.01,0.884,0.000107,0.000114
+2026-05-28T15:27:51.263206,llama4-scout__code__es,llama4-scout,code,es,100,100,1.0,496.73,476.0,124.84,709.61,1.385,0.000192,0.000192
+2026-05-28T15:32:41.118089,llama4-scout__code__tr,llama4-scout,code,tr,100,100,1.0,465.22,450.5,124.3,678.1,1.332,0.000182,0.000182
