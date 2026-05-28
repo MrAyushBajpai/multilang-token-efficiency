@@ -28,3 +28,4 @@ timestamp,run_key,model,task,language,n,n_correct,accuracy,mean_completion_token
 2026-05-27T13:55:10.179746,qwen3-32b__commonsense__tr,qwen3-32b,commonsense,tr,100,94,0.94,496.12,452.0,193.7,619.12,4.645,0.000229,0.000244
 2026-05-27T15:39:31.072035,llama3.3-70b__commonsense__en,llama3.3-70b,commonsense,en,100,93,0.93,277.95,273.5,68.1,422.71,1.396,0.000305,0.000328
 2026-05-27T15:43:52.292118,llama3.3-70b__commonsense__zh,llama3.3-70b,commonsense,zh,100,94,0.94,178.33,170.5,79.22,323.09,1.112,0.000226,0.000241
+2026-05-28T09:16:48.177596,llama3.3-70b__math__hi,llama3.3-70b,math,hi,100,87,0.87,340.09,318.0,146.17,492.06,1.292,0.000358,0.000412
