@@ -1,0 +1,10 @@
+# API & Environment
+groq>=0.9.0
+python-dotenv>=1.0.1
+
+# Data Analysis & Manipulation
+pandas>=2.2.0
+
+# Plotting & Visualization
+matplotlib>=3.8.0
+seaborn>=0.13.0
