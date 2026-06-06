@@ -4,9 +4,9 @@ datasets.py
 Provides small, self-contained problem sets for each task type.
 
 For a real paper you would load from:
-  - Math:        MATH500  (https://huggingface.co/datasets/lighteval/MATH)
-  - Commonsense: ARC-Easy (https://huggingface.co/datasets/ai2_arc)
-  - Code:        HumanEval (https://huggingface.co/datasets/openai_humaneval)
+  - Math:        GSM8k      (https://huggingface.co/datasets/openai/gsm8k)
+  - Commonsense: ARC-Easy   (https://huggingface.co/datasets/ai2_arc)
+  - Code:        HumanEval  (https://huggingface.co/datasets/openai/openai_humaneval)
 
 The functions below include:
   1. A loader that tries to pull from HuggingFace datasets.
@@ -61,8 +61,8 @@ COMMONSENSE_PROBLEMS = [
     {"id": "c15", "question": "If you fold a square piece of paper in half twice, how many layers do you have?\nA) 2\nB) 3\nC) 4\nD) 8", "answer": "C"},
     {"id": "c16", "question": "Which of the following is heavier: 1 kg of feathers or 1 kg of iron?\nA) Iron\nB) Feathers\nC) They weigh the same\nD) Depends on volume", "answer": "C"},
     {"id": "c17", "question": "A car faces north and turns right twice. Which direction does it now face?\nA) North\nB) South\nC) East\nD) West", "answer": "B"},
-    {"id": "c18", "question": "What process do plants use to make their own food using sunlight?\nA) Respiration\nB) Fermentation\nC) Photosynthesis\nD) Digestion", "answer": "C"},
-    {"id": "c19", "question": "If today is Wednesday and an event is in 10 days, what day will it be?\nA) Friday\nB) Saturday\nC) Sunday\nD) Monday", "answer": "B"},  # Wed + 10 = Sat
+    {"id": "c18", "question": "What process do planAlexts use to make their own food using sunlight?\nA) Respiration\nB) Fermentation\nC) Photosynthesis\nD) Digestion", "answer": "C"},
+    {"id": "c19", "question": "If today is Wednesday and an event is in 10 days, what day will it be?\nA) Friday\nB) Saturday\nC) Sunday\nD) Monday", "answer": "B"},
     {"id": "c20", "question": "Which of the following is NOT a mammal?\nA) Dolphin\nB) Bat\nC) Salmon\nD) Whale", "answer": "C"},
 ]
 
@@ -139,6 +139,7 @@ def get_dataset(task: str, n_samples: int = 50, seed: int = 42) -> List[Dict[str
     rng  = random.Random(seed)
     if n_samples <= len(bank):
         return rng.sample(bank, n_samples)
+    
     # Repeat with shuffled copies to reach n_samples
     problems = []
     while len(problems) < n_samples:
@@ -177,7 +178,8 @@ def _load_from_hf(task: str, n_samples: int, seed: int) -> List[Dict[str, Any]]:
         return problems
 
     elif task == "code":
-        ds = load_dataset("openai_humaneval", split="test")
+        # FIXED: Updated repo path to use the explicit canonical namespace 'openai/openai_humaneval'
+        ds = load_dataset("openai/openai_humaneval", split="test")
         ds = ds.shuffle(seed=seed).select(range(min(n_samples, len(ds))))
         return [{"id": r["task_id"], "question": r["prompt"], "answer": r["entry_point"]}
                 for r in ds]
