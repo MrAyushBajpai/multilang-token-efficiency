@@ -163,7 +163,7 @@ def _load_from_hf(task: str, n_samples: int, seed: int) -> List[Dict[str, Any]]:
                 for i, r in enumerate(ds)]
 
     elif task == "commonsense":
-        ds = load_dataset("ai2_arc", "ARC-Easy", split="test")
+        ds = load_dataset("allenai/ai2_arc", "ARC-Easy", split="test")
         ds = ds.shuffle(seed=seed).select(range(min(n_samples, len(ds))))
         problems = []
         for i, r in enumerate(ds):
