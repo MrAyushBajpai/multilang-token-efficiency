@@ -9,6 +9,14 @@ Loads results/ and produces:
      - Bar chart: mean completion tokens by language/model/task
      - Scatter: accuracy vs token count (bubble = language)
      - Heatmap: efficiency ratios across language × task
+     - Bar chart: Ceff ratio vs English
+
+NOTE: qwen3-32b / code is excluded from all tables and plots.
+Qwen3-32B's chain-of-thought overhead on code tasks caused severe
+truncation at the original 2048-token cap, making those results
+invalid for cross-language comparison. The cell is dropped here
+rather than re-included with a different cap, to keep the
+qwen3-32b comparison internally consistent across tasks.
 """
 
 import json
@@ -26,6 +34,12 @@ LANG_LABELS = {
     "ar": "Arabic",  "es": "Spanish", "tr": "Turkish",
 }
 TASK_LABELS = {"math": "Math", "commonsense": "Commonsense", "code": "Code"}
+
+# Cells to exclude from analysis entirely.
+# Each entry is (model, task); all languages for that combination are dropped.
+EXCLUDED_CELLS = {
+    ("qwen3-32b", "code"),
+}
 
 
 # ── Load & process ────────────────────────────────────────────────────────────
@@ -90,7 +104,27 @@ def load_summary_df(results_dir: str) -> pd.DataFrame:
 
     df["lang_label"] = df["language"].map(LANG_LABELS)
     df["task_label"] = df["task"].map(TASK_LABELS)
+
+    df = exclude_cells(df)
+
     return df
+
+
+def exclude_cells(df: pd.DataFrame) -> pd.DataFrame:
+    """Drop any (model, task) combinations listed in EXCLUDED_CELLS."""
+    if not EXCLUDED_CELLS:
+        return df
+
+    mask = pd.Series(False, index=df.index)
+    for model, task in EXCLUDED_CELLS:
+        mask |= (df["model"] == model) & (df["task"] == task)
+
+    if mask.any():
+        dropped = df.loc[mask, ["model", "task", "language"]]
+        print(f"  Excluding {mask.sum()} row(s) per EXCLUDED_CELLS: "
+              f"{sorted(set(zip(dropped['model'], dropped['task'])))}")
+
+    return df.loc[~mask].reset_index(drop=True)
 
 
 def compute_ratio_table(df: pd.DataFrame, metric: str = "mean_completion_tokens") -> pd.DataFrame:
@@ -115,10 +149,15 @@ def plot_token_bars(df: pd.DataFrame, output_dir: str):
     models = df["model"].unique()
     for model in models:
         mdf = df[df["model"] == model]
-        fig, axes = plt.subplots(1, 3, figsize=(14, 4), sharey=False)
+        tasks = [t for t in ["math", "commonsense", "code"] if not mdf[mdf["task"] == t].empty]
+        if not tasks:
+            continue
+
+        fig, axes = plt.subplots(1, len(tasks), figsize=(14, 4), sharey=False)
+        if len(tasks) == 1:
+            axes = [axes]
         fig.suptitle(f"Mean Completion Tokens — {model}", fontsize=13)
 
-        tasks = ["math", "commonsense", "code"]
         for ax, task in zip(axes, tasks):
             tdf = mdf[mdf["task"] == task].sort_values("language")
             bars = ax.bar(tdf["lang_label"], tdf["mean_completion_tokens"],
@@ -144,8 +183,10 @@ def plot_token_bars(df: pd.DataFrame, output_dir: str):
 
 def plot_accuracy_vs_tokens(df: pd.DataFrame, output_dir: str):
     """Scatter: accuracy vs mean_completion_tokens. One dot per (model, task, lang)."""
-    fig, axes = plt.subplots(1, 3, figsize=(15, 5), sharey=False)
-    tasks = ["math", "commonsense", "code"]
+    tasks = [t for t in ["math", "commonsense", "code"] if not df[df["task"] == t].empty]
+    fig, axes = plt.subplots(1, len(tasks), figsize=(5 * len(tasks), 5), sharey=False)
+    if len(tasks) == 1:
+        axes = [axes]
 
     palette = sns.color_palette("tab10", len(LANG_LABELS))
     lang_colors = {lang: palette[i] for i, lang in enumerate(LANG_LABELS)}
