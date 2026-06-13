@@ -1,9 +1,9 @@
 model,task,ar,en,es,hi,tr,zh
 llama3.3-70b,code,0.98,1.0,0.93,0.99,1.0,0.96
-llama3.3-70b,commonsense,0.84,0.93,0.92,0.93,0.929,0.94
-llama3.3-70b,math,0.87,0.9,0.93,0.87,0.94,0.91
+llama3.3-70b,commonsense,0.88,0.93,0.92,0.93,0.929,0.94
+llama3.3-70b,math,0.92,0.9,0.93,0.89,0.94,0.91
 llama4-scout,code,1.0,1.0,1.0,0.98,1.0,1.0
-llama4-scout,commonsense,0.86,0.77,0.93,0.88,0.94,0.9
-llama4-scout,math,0.94,0.88,0.67,0.9,0.9,0.93
+llama4-scout,commonsense,0.91,0.82,0.93,0.91,0.94,0.93
+llama4-scout,math,0.94,0.88,0.92,0.9,0.94,0.93
 qwen3-32b,commonsense,0.94,0.95,0.94,0.94,0.94,0.93
-qwen3-32b,math,0.86,0.78,0.87,0.9,0.87,0.89
+qwen3-32b,math,0.88,0.78,0.87,0.9,0.87,0.89
