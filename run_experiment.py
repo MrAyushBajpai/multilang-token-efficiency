@@ -97,7 +97,7 @@ def call_groq(client, model_id, system_prompt, user_prompt, use_reasoning=False)
             {"role": "user",   "content": user_prompt},
         ],
         "temperature": TEMPERATURE,
-        "max_completion_tokens": 8192,
+        "max_completion_tokens": 2048,
     }
 
     # For Qwen3, request parsed reasoning so we can measure reasoning tokens
