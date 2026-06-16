@@ -1,0 +1,46 @@
+model,task,lang_a,lang_b,acc_a,acc_b,acc_diff,b_a_right_b_wrong,c_a_wrong_b_right,n_discordant,chi2,p_value,significant,direction,cohens_h
+llama3.3-70b,code,en,es,1.0,0.93,0.07,7,0,7,5.1429,0.023342,True,English > Spanish,0.5355
+llama3.3-70b,code,en,zh,1.0,0.96,0.04,4,0,4,2.25,0.133614,False,English > Chinese,0.4027
+llama3.3-70b,code,ar,en,0.98,1.0,-0.02,0,2,2,0.5,0.4795,False,English > Arabic,0.2838
+llama3.3-70b,code,en,hi,1.0,0.99,0.01,1,0,1,0.0,1.0,False,English > Hindi,0.2003
+llama3.3-70b,code,en,tr,1.0,1.0,0.0,0,0,0,0.0,1.0,False,tie,0.0
+llama4-scout,code,en,hi,1.0,0.98,0.02,2,0,2,0.5,0.4795,False,English > Hindi,0.2838
+llama4-scout,code,ar,en,1.0,1.0,0.0,0,0,0,0.0,1.0,False,tie,0.0
+llama4-scout,code,en,es,1.0,1.0,0.0,0,0,0,0.0,1.0,False,tie,0.0
+llama4-scout,code,en,tr,1.0,1.0,0.0,0,0,0,0.0,1.0,False,tie,0.0
+llama4-scout,code,en,zh,1.0,1.0,0.0,0,0,0,0.0,1.0,False,tie,0.0
+qwen3-32b,code,en,tr,0.28,0.64,-0.36,1,37,38,32.2368,0.0,True,Turkish > English,0.7394
+qwen3-32b,code,ar,en,0.52,0.28,0.24,26,2,28,18.8929,1.4e-05,True,Arabic > English,0.4956
+qwen3-32b,code,en,zh,0.28,0.5,-0.22,2,24,26,16.9615,3.8e-05,True,Chinese > English,0.4556
+qwen3-32b,code,en,es,0.28,0.4,-0.12,4,16,20,6.05,0.013906,True,Spanish > English,0.2542
+qwen3-32b,code,en,hi,0.28,0.29,-0.01,15,16,31,0.0,1.0,False,Hindi > English,0.0222
+llama3.3-70b,commonsense,ar,en,0.88,0.93,-0.05,0,5,5,3.2,0.073638,False,English > Arabic,0.172
+llama3.3-70b,commonsense,en,es,0.93,0.92,0.01,1,0,1,0.0,1.0,False,English > Spanish,0.038
+llama3.3-70b,commonsense,en,hi,0.93,0.93,0.0,0,0,0,0.0,1.0,False,tie,0.0
+llama3.3-70b,commonsense,en,tr,0.93,0.93,0.0,0,0,0,0.0,1.0,False,tie,0.0
+llama3.3-70b,commonsense,en,zh,0.93,0.94,-0.01,0,1,1,0.0,1.0,False,Chinese > English,0.0406
+llama4-scout,commonsense,en,tr,0.82,0.94,-0.12,0,12,12,10.0833,0.001496,True,Turkish > English,0.3814
+llama4-scout,commonsense,en,es,0.82,0.93,-0.11,0,11,11,9.0909,0.002569,True,Spanish > English,0.3408
+llama4-scout,commonsense,en,zh,0.82,0.93,-0.11,0,11,11,9.0909,0.002569,True,Chinese > English,0.3408
+llama4-scout,commonsense,ar,en,0.91,0.82,0.09,10,1,11,5.8182,0.015861,True,Arabic > English,0.2669
+llama4-scout,commonsense,en,hi,0.82,0.91,-0.09,2,11,13,4.9231,0.0265,True,Hindi > English,0.2669
+qwen3-32b,commonsense,en,zh,0.95,0.93,0.02,2,0,2,0.5,0.4795,False,English > Chinese,0.0845
+qwen3-32b,commonsense,ar,en,0.94,0.95,-0.01,0,1,1,0.0,1.0,False,English > Arabic,0.0439
+qwen3-32b,commonsense,en,es,0.95,0.94,0.01,1,0,1,0.0,1.0,False,English > Spanish,0.0439
+qwen3-32b,commonsense,en,hi,0.95,0.94,0.01,1,0,1,0.0,1.0,False,English > Hindi,0.0439
+qwen3-32b,commonsense,en,tr,0.95,0.94,0.01,1,0,1,0.0,1.0,False,English > Turkish,0.0439
+llama3.3-70b,math,en,tr,0.9,0.94,-0.04,0,4,4,2.25,0.133614,False,Turkish > English,0.1486
+llama3.3-70b,math,en,es,0.9,0.93,-0.03,0,3,3,1.3333,0.248213,False,Spanish > English,0.108
+llama3.3-70b,math,ar,en,0.92,0.9,0.02,3,1,4,0.25,0.617075,False,Arabic > English,0.07
+llama3.3-70b,math,en,hi,0.9,0.89,0.01,2,1,3,0.0,1.0,False,English > Hindi,0.0326
+llama3.3-70b,math,en,zh,0.9,0.91,-0.01,2,3,5,0.0,1.0,False,Chinese > English,0.0341
+llama4-scout,math,ar,en,0.94,0.88,0.06,6,0,6,4.1667,0.041227,True,Arabic > English,0.2125
+llama4-scout,math,en,tr,0.88,0.94,-0.06,1,7,8,3.125,0.0771,False,Turkish > English,0.2125
+llama4-scout,math,en,zh,0.88,0.93,-0.05,1,6,7,2.2857,0.13057,False,Chinese > English,0.172
+llama4-scout,math,en,es,0.88,0.92,-0.04,1,5,6,1.5,0.220671,False,Spanish > English,0.134
+llama4-scout,math,en,hi,0.88,0.9,-0.02,4,6,10,0.1,0.75183,False,Hindi > English,0.064
+qwen3-32b,math,en,hi,0.78,0.9,-0.12,2,14,16,7.5625,0.00596,True,Hindi > English,0.3329
+qwen3-32b,math,en,zh,0.78,0.89,-0.11,3,14,17,5.8824,0.015293,True,Chinese > English,0.3003
+qwen3-32b,math,ar,en,0.88,0.78,0.1,12,2,14,5.7857,0.016157,True,Arabic > English,0.2689
+qwen3-32b,math,en,es,0.78,0.87,-0.09,3,12,15,4.2667,0.038867,True,Spanish > English,0.2387
+qwen3-32b,math,en,tr,0.78,0.87,-0.09,3,12,15,4.2667,0.038867,True,Turkish > English,0.2387
