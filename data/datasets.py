@@ -12,7 +12,7 @@ If the cache file exists it is loaded directly — no network call.
 Tasks:
   math        → GSM8k (openai/gsm8k, test split)
   commonsense → ARC-Easy (allenai/ai2_arc ARC-Easy, test split)
-  code        → HumanEval (openai/openai_humaneval, test split)
+  code        → MBPP (Muennighoff/mbpp, "full" config, test split, 974 problems)
 
 Fallback hardcoded banks (20 items each) are used when the HF
 datasets package is unavailable or the download fails.
@@ -167,12 +167,36 @@ def _load_from_hf(task: str, n: int, seed: int) -> List[Dict[str, Any]]:
         return problems
 
     elif task == "code":
-        ds = load_dataset("openai/openai_humaneval", split="test")
+        # MBPP (Mostly Basic Python Problems) — 974 problems, well above the
+        # 500-sample default. Using Muennighoff/mbpp which is the community
+        # mirror with confirmed availability (google-research-datasets/mbpp
+        # may require extra auth on some HF plan tiers).
+        #
+        # Fields used:
+        #   task_id   → unique integer id
+        #   text      → natural-language problem description (the prompt)
+        #   code      → reference solution (entry-point fn name extracted)
+        #   test_list → list of assert strings for pass/fail evaluation
+        #
+        # test_list is stored so downstream evaluators can execute the asserts
+        # against the model's generated code rather than doing string matching.
+        ds = load_dataset("Muennighoff/mbpp", "full", split="test")
         ds = ds.shuffle(seed=seed).select(range(min(n, len(ds))))
-        return [
-            {"id": r["task_id"], "question": r["prompt"], "answer": r["entry_point"]}
-            for r in ds
-        ]
+        problems = []
+        for r in ds:
+            # Extract the entry-point function name from the reference solution.
+            code = r["code"]
+            if "def " in code:
+                entry_point = code.split("def ")[1].split("(")[0].strip()
+            else:
+                entry_point = str(r["task_id"])
+            problems.append({
+                "id":        f"mbpp_{r['task_id']}",
+                "question":  r["text"],
+                "answer":    entry_point,
+                "test_list": r["test_list"],          # list of assert strings
+            })
+        return problems
 
     return []
 
