@@ -7,8 +7,8 @@ Models (non-reasoning only, avoids ceiling problems):
   - llama3.3-70b  : Llama 3.3 70B Versatile  — strongest general model
   - llama4-scout  : Llama 4 Scout 17B         — newest architecture
   - llama3.1-8b   : Llama 3.1 8B Instant      — small / fast baseline
-  - gemma2-9b     : Gemma 2 9B IT             — Google architecture
-  - mistral-saba  : Mistral Saba 24B           — strong multilingual model
+  - gpt-oss-20b   : OpenAI GPT OSS 20B        — fast OpenAI open model
+  - gpt-oss-120b  : OpenAI GPT OSS 120B       — large OpenAI open model
 
 NOTE ON QWEN3-32B:
   Qwen3-32B is a reasoning model on Groq. Even with reasoning disabled it
@@ -78,8 +78,8 @@ MODELS: dict[str, str] = {
     "llama3.3-70b": "llama-3.3-70b-versatile",
     "llama4-scout": "meta-llama/llama-4-scout-17b-16e-instruct",
     "llama3.1-8b":  "llama-3.1-8b-instant",
-    "gemma2-9b":    "gemma2-9b-it",
-    "mistral-saba": "mistral-saba-24b",
+    "gpt-oss-20b":  "openai/gpt-oss-20b",
+    "gpt-oss-120b": "openai/gpt-oss-120b",
 }
 
 if INCLUDE_QWEN:
