@@ -111,30 +111,54 @@ RETRY_BASE_DELAY       = 15   # seconds (doubles each attempt)
 INTER_QUESTION_DELAY   = 1.2  # seconds between questions (rate-limit courtesy)
 
 
+# ── Language-native instruction fragments ─────────────────────────────────────
+# These tell the model to respond in the target language *in that language*,
+# providing a strong in-language anchor that English-biased models respect.
+LANG_SELF_INSTRUCTION: dict[str, str] = {
+    "en": "Respond entirely in English.",
+    "zh": "请完全用中文回答，包括所有推理步骤。不得使用英文句子或段落。",
+    "ar": "أجب بالكامل باللغة العربية، بما في ذلك جميع خطوات التفكير. لا تكتب أي جملة بالإنجليزية.",
+    "hi": "कृपया सभी तर्क चरणों सहित पूरी तरह से हिंदी में उत्तर दें। कोई भी वाक्य अंग्रेज़ी में न लिखें।",
+    "fi": "Vastaa kokonaan suomeksi, mukaan lukien kaikki päättelyvaiheet. Älä kirjoita yhtään lausetta englanniksi.",
+    "ko": "모든 추론 단계를 포함하여 전적으로 한국어로 답하십시오. 영어 문장을 사용하지 마십시오.",
+    "sw": "Jibu kabisa kwa Kiswahili, ikiwemo hatua zote za kufikiri. Usiandike sentensi yoyote kwa Kiingereza.",
+    "es": "Responde completamente en español, incluyendo todos los pasos de razonamiento. No escribas ninguna oración en inglés.",
+    "tr": "Tüm akıl yürütme adımları dahil olmak üzere tamamen Türkçe yanıt ver. İngilizce cümle yazma.",
+    "de": "Antworte vollständig auf Deutsch, einschließlich aller Denkschritte. Schreibe keinen einzigen Satz auf Englisch.",
+    "fr": "Réponds entièrement en français, y compris toutes les étapes de raisonnement. N'écris aucune phrase en anglais.",
+}
+
 # ── Prompt templates ──────────────────────────────────────────────────────────
 SYSTEM_PROMPTS = {
     "math": (
         "You are a math problem solver. "
-        "You MUST think and respond ENTIRELY in {language} — including ALL reasoning steps. "
-        "Do NOT write any part of your solution in English unless {language} IS English. "
-        "Solve the problem step by step in {language}. "
+        "The user's question will arrive in {language}. "
+        "You MUST write your ENTIRE response in {language} ONLY — "
+        "every word, every reasoning step, every sentence. "
+        "Absolutely NO English prose or sentences are allowed unless {language} IS English. "
+        "Solve the problem step by step. "
         "Give your final numerical answer on the LAST line, prefixed with 'Answer:' "
-        "(the prefix 'Answer:' may stay in English; the number must follow it)."
+        "(the token 'Answer:' may stay in English; only the number follows it). "
+        "{lang_self_instruction}"
     ),
     "commonsense": (
         "You are a reasoning assistant. "
-        "You MUST think and respond ENTIRELY in {language} — including ALL reasoning steps. "
-        "Do NOT write any part of your reasoning in English unless {language} IS English. "
-        "Answer the multiple-choice question. Think step by step in {language}, "
-        "then give your final answer as a single letter (A/B/C/D) on the LAST line "
-        "prefixed with 'Answer:'."
+        "The user's question will arrive in {language}. "
+        "You MUST write your ENTIRE response in {language} ONLY — "
+        "every word, every reasoning step, every sentence. "
+        "Absolutely NO English prose or sentences are allowed unless {language} IS English. "
+        "Think step by step, then give your final answer as a single letter (A/B/C/D) "
+        "on the LAST line prefixed with 'Answer:'. "
+        "{lang_self_instruction}"
     ),
     "code": (
         "You are an expert programmer. "
         "Write ALL natural-language explanations, comments, and reasoning in {language}. "
+        "Absolutely NO English prose outside of code blocks unless {language} IS English. "
         "The code itself (variable names, function names, keywords) must remain in English "
         "and be placed inside ```python ... ``` blocks. "
-        "Do NOT mix {language} text into the code block."
+        "Do NOT mix {language} text into the code block. "
+        "{lang_self_instruction}"
     ),
 }
 
@@ -341,8 +365,18 @@ def run_experiment(
                     if i in done_indices and not force_rerun:
                         continue   # already saved
 
-                    sys_prompt  = SYSTEM_PROMPTS[task].format(language=lang_name)
-                    user_prompt = item["question"]
+                    sys_prompt  = SYSTEM_PROMPTS[task].format(
+                        language=lang_name,
+                        lang_self_instruction=LANG_SELF_INSTRUCTION.get(lang_code, ""),
+                    )
+                    # Prepend a native-language instruction to the user turn as
+                    # a second enforcement point; models weight recent tokens heavily.
+                    lang_prefix = LANG_SELF_INSTRUCTION.get(lang_code, "")
+                    user_prompt = (
+                        f"{lang_prefix}\n\n{item['question']}"
+                        if lang_prefix and lang_code != "en"
+                        else item["question"]
+                    )
 
                     result = call_groq(
                         client, model_id, sys_prompt, user_prompt
