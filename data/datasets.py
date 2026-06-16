@@ -168,9 +168,13 @@ def _load_from_hf(task: str, n: int, seed: int) -> List[Dict[str, Any]]:
 
     elif task == "code":
         # MBPP (Mostly Basic Python Problems) — 974 problems, well above the
-        # 500-sample default. Using Muennighoff/mbpp which is the community
-        # mirror with confirmed availability (google-research-datasets/mbpp
-        # may require extra auth on some HF plan tiers).
+        # 500-sample default.
+        #
+        # Muennighoff/mbpp uses a legacy dataset script (.py) that modern
+        # versions of the `datasets` library refuse to execute. We bypass this
+        # by loading directly from the auto-converted Parquet files that
+        # Hugging Face generates for every dataset (refs/convert/parquet).
+        # This requires no trust_remote_code and works on all library versions.
         #
         # Fields used:
         #   task_id   → unique integer id
@@ -180,7 +184,11 @@ def _load_from_hf(task: str, n: int, seed: int) -> List[Dict[str, Any]]:
         #
         # test_list is stored so downstream evaluators can execute the asserts
         # against the model's generated code rather than doing string matching.
-        ds = load_dataset("Muennighoff/mbpp", "full", split="test")
+        MBPP_PARQUET = (
+            "https://huggingface.co/datasets/Muennighoff/mbpp/resolve/"
+            "refs%2Fconvert%2Fparquet/full/test/0000.parquet"
+        )
+        ds = load_dataset("parquet", data_files={"test": MBPP_PARQUET}, split="test")
         ds = ds.shuffle(seed=seed).select(range(min(n, len(ds))))
         problems = []
         for r in ds:
