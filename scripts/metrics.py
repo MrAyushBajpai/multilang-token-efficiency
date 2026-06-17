@@ -20,14 +20,20 @@ from typing import List, Dict, Any, Optional
 
 
 # Groq pricing as of June 2026 (USD per million tokens)
-# Update if Groq changes pricing.
+# Source: https://groq.com/pricing — verified directly against Groq's
+# official pricing page. Update if Groq changes pricing.
+# NOTE: keys here MUST match the model_key strings used in run_experiment.py's
+# MODELS registry (e.g. "gpt-oss-20b", not "openai/gpt-oss-20b"), since
+# compute_metrics() looks up records[0]["model"] which stores the short key.
 TOKEN_PRICE_PER_M: Dict[str, Dict[str, float]] = {
-    "llama3.3-70b":  {"input": 0.59, "output": 0.79},
-    "llama4-scout":  {"input": 0.11, "output": 0.34},
-    "llama3.1-8b":   {"input": 0.05, "output": 0.08},
-    "llama3.2-3b":   {"input": 0.06, "output": 0.06},
-    "gemma2-9b":     {"input": 0.20, "output": 0.20},
-    "mistral-saba":  {"input": 0.79, "output": 0.79},
+    "llama3.3-70b":  {"input": 0.59,  "output": 0.79},
+    "llama4-scout":  {"input": 0.11,  "output": 0.34},
+    "llama3.1-8b":   {"input": 0.05,  "output": 0.08},
+    "gpt-oss-20b":   {"input": 0.075, "output": 0.30},
+    "gpt-oss-120b":  {"input": 0.15,  "output": 0.60},
+    "llama3.2-3b":   {"input": 0.06,  "output": 0.06},
+    "gemma2-9b":     {"input": 0.20,  "output": 0.20},
+    "mistral-saba":  {"input": 0.79,  "output": 0.79},
 }
 
 
