@@ -10,5 +10,6 @@
   "llama3.1-8b__math__ar": "RUNNING",
   "gpt-oss-20b__math__zh": "RUNNING",
   "gpt-oss-120b__math__zh": "RUNNING",
-  "llama4-scout__math__hi": "RUNNING"
+  "llama4-scout__math__hi": "DONE",
+  "llama4-scout__math__fi": "RUNNING"
 }
