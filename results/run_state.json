@@ -23,5 +23,6 @@
   "gpt-oss-20b__math__ar": "DONE",
   "gpt-oss-20b__math__hi": "RUNNING",
   "llama4-scout__math__es": "DONE",
-  "llama4-scout__math__tr": "RUNNING"
+  "llama4-scout__math__tr": "DONE",
+  "llama4-scout__math__de": "RUNNING"
 }
