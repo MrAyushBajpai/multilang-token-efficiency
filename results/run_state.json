@@ -29,6 +29,7 @@
   "llama4-scout__commonsense__en": "DONE",
   "llama4-scout__commonsense__zh": "DONE",
   "llama4-scout__commonsense__ar": "RUNNING",
-  "llama3.1-8b__math__fi": "RUNNING",
-  "gpt-oss-20b__math__fi": "RUNNING"
+  "llama3.1-8b__math__fi": "DONE",
+  "gpt-oss-20b__math__fi": "RUNNING",
+  "llama3.1-8b__math__ko": "RUNNING"
 }
