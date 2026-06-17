@@ -12,5 +12,6 @@
   "gpt-oss-120b__math__zh": "RUNNING",
   "llama4-scout__math__hi": "DONE",
   "llama4-scout__math__fi": "DONE",
-  "llama4-scout__math__ko": "RUNNING"
+  "llama4-scout__math__ko": "DONE",
+  "llama4-scout__math__sw": "RUNNING"
 }
