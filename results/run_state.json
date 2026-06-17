@@ -5,8 +5,9 @@
   "llama3.1-8b__math__zh": "DONE",
   "gpt-oss-20b__math__en": "DONE",
   "llama4-scout__math__zh": "DONE",
-  "gpt-oss-120b__math__en": "RUNNING",
+  "gpt-oss-120b__math__en": "DONE",
   "llama4-scout__math__ar": "RUNNING",
   "llama3.1-8b__math__ar": "RUNNING",
-  "gpt-oss-20b__math__zh": "RUNNING"
+  "gpt-oss-20b__math__zh": "RUNNING",
+  "gpt-oss-120b__math__zh": "RUNNING"
 }
