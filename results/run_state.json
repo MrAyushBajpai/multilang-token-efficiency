@@ -15,5 +15,6 @@
   "llama4-scout__math__ko": "DONE",
   "llama4-scout__math__sw": "RUNNING",
   "llama3.1-8b__math__hi": "RUNNING",
-  "gpt-oss-120b__math__ar": "RUNNING"
+  "gpt-oss-120b__math__ar": "DONE",
+  "gpt-oss-120b__math__hi": "RUNNING"
 }
