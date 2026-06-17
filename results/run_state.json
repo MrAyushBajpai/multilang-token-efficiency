@@ -31,5 +31,6 @@
   "llama4-scout__commonsense__ar": "RUNNING",
   "llama3.1-8b__math__fi": "DONE",
   "gpt-oss-20b__math__fi": "RUNNING",
-  "llama3.1-8b__math__ko": "RUNNING"
+  "llama3.1-8b__math__ko": "DONE",
+  "llama3.1-8b__math__sw": "RUNNING"
 }
