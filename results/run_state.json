@@ -32,5 +32,6 @@
   "llama3.1-8b__math__fi": "DONE",
   "gpt-oss-20b__math__fi": "RUNNING",
   "llama3.1-8b__math__ko": "DONE",
-  "llama3.1-8b__math__sw": "RUNNING"
+  "llama3.1-8b__math__sw": "DONE",
+  "llama3.1-8b__math__es": "RUNNING"
 }
