@@ -30,7 +30,7 @@
   "llama4-scout__commonsense__zh": "DONE",
   "llama4-scout__commonsense__ar": "DONE",
   "llama3.1-8b__math__fi": "DONE",
-  "gpt-oss-20b__math__fi": "RUNNING",
+  "gpt-oss-20b__math__fi": "DONE",
   "llama3.1-8b__math__ko": "DONE",
   "llama3.1-8b__math__sw": "DONE",
   "llama3.1-8b__math__es": "DONE",
@@ -44,5 +44,6 @@
   "llama3.1-8b__commonsense__ar": "RUNNING",
   "gpt-oss-120b__math__ko": "RUNNING",
   "llama4-scout__commonsense__fi": "DONE",
-  "llama4-scout__commonsense__ko": "RUNNING"
+  "llama4-scout__commonsense__ko": "RUNNING",
+  "gpt-oss-20b__math__ko": "RUNNING"
 }
