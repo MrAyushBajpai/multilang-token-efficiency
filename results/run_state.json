@@ -38,5 +38,7 @@
   "llama4-scout__commonsense__hi": "RUNNING",
   "llama3.3-70b__math__hi": "RUNNING",
   "llama3.1-8b__math__de": "DONE",
-  "llama3.1-8b__math__fr": "RUNNING"
+  "llama3.1-8b__math__fr": "DONE",
+  "llama3.1-8b__commonsense__en": "DONE",
+  "llama3.1-8b__commonsense__zh": "RUNNING"
 }
