@@ -41,7 +41,7 @@
   "llama3.1-8b__math__fr": "DONE",
   "llama3.1-8b__commonsense__en": "DONE",
   "llama3.1-8b__commonsense__zh": "DONE",
-  "llama3.1-8b__commonsense__ar": "RUNNING",
+  "llama3.1-8b__commonsense__ar": "DONE",
   "gpt-oss-120b__math__ko": "RUNNING",
   "llama4-scout__commonsense__fi": "DONE",
   "llama4-scout__commonsense__ko": "DONE",
