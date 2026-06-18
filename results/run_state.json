@@ -42,12 +42,13 @@
   "llama3.1-8b__commonsense__en": "DONE",
   "llama3.1-8b__commonsense__zh": "DONE",
   "llama3.1-8b__commonsense__ar": "DONE",
-  "gpt-oss-120b__math__ko": "RUNNING",
+  "gpt-oss-120b__math__ko": "DONE",
   "llama4-scout__commonsense__fi": "DONE",
   "llama4-scout__commonsense__ko": "DONE",
   "gpt-oss-20b__math__ko": "RUNNING",
   "llama4-scout__commonsense__sw": "DONE",
   "llama4-scout__commonsense__es": "DONE",
   "llama4-scout__commonsense__tr": "DONE",
-  "llama4-scout__commonsense__de": "RUNNING"
+  "llama4-scout__commonsense__de": "RUNNING",
+  "gpt-oss-120b__math__sw": "RUNNING"
 }
