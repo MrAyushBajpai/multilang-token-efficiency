@@ -54,9 +54,9 @@
   "gpt-oss-20b__math__sw": "DONE",
   "llama3.1-8b__commonsense__hi": "RUNNING",
   "gpt-oss-120b__math__es": "DONE",
-  "gpt-oss-20b__math__es": "RUNNING",
+  "gpt-oss-20b__math__es": "DONE",
   "llama4-scout__commonsense__fr": "DONE",
-  "llama4-scout__code__en": "RUNNING",
   "gpt-oss-120b__math__tr": "RUNNING",
-  "llama3.3-70b__math__fi": "RUNNING"
+  "llama3.3-70b__math__fi": "RUNNING",
+  "gpt-oss-20b__math__tr": "RUNNING"
 }
