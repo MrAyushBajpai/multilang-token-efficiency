@@ -66,5 +66,6 @@
   "llama3.3-70b__math__ko": "RUNNING",
   "llama4-scout__code__en": "DONE",
   "llama4-scout__code__zh": "DONE",
-  "llama4-scout__code__ar": "RUNNING"
+  "llama4-scout__code__ar": "DONE",
+  "llama4-scout__code__hi": "RUNNING"
 }
