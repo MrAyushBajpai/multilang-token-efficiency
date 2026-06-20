@@ -71,5 +71,6 @@
   "llama4-scout__code__fi": "DONE",
   "llama4-scout__code__ko": "DONE",
   "gpt-oss-20b__commonsense__en": "RUNNING",
-  "llama4-scout__code__sw": "RUNNING"
+  "llama4-scout__code__sw": "DONE",
+  "llama4-scout__code__es": "RUNNING"
 }
