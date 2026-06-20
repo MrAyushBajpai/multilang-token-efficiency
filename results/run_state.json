@@ -59,5 +59,6 @@
   "gpt-oss-120b__math__tr": "DONE",
   "llama3.3-70b__math__fi": "RUNNING",
   "gpt-oss-20b__math__tr": "RUNNING",
-  "gpt-oss-120b__math__de": "RUNNING"
+  "gpt-oss-120b__math__de": "DONE",
+  "gpt-oss-120b__math__fr": "RUNNING"
 }
