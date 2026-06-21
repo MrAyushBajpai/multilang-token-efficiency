@@ -70,10 +70,11 @@
   "llama4-scout__code__hi": "DONE",
   "llama4-scout__code__fi": "DONE",
   "llama4-scout__code__ko": "DONE",
-  "gpt-oss-20b__commonsense__en": "RUNNING",
+  "gpt-oss-20b__commonsense__en": "DONE",
   "llama4-scout__code__sw": "DONE",
   "llama4-scout__code__es": "RUNNING",
   "gpt-oss-120b__commonsense__en": "DONE",
   "gpt-oss-120b__commonsense__zh": "RUNNING",
-  "llama3.3-70b__math__sw": "RUNNING"
+  "llama3.3-70b__math__sw": "RUNNING",
+  "gpt-oss-20b__commonsense__zh": "RUNNING"
 }
