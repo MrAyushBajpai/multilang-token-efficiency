@@ -85,5 +85,6 @@
   "llama3.3-70b__math__tr": "RUNNING",
   "llama4-scout__code__tr": "DONE",
   "llama4-scout__code__es": "DONE",
-  "llama4-scout__code__de": "RUNNING"
+  "llama4-scout__code__de": "DONE",
+  "llama4-scout__code__fr": "RUNNING"
 }
