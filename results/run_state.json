@@ -79,5 +79,6 @@
   "gpt-oss-20b__commonsense__zh": "DONE",
   "gpt-oss-120b__commonsense__ar": "DONE",
   "gpt-oss-120b__commonsense__hi": "RUNNING",
-  "gpt-oss-20b__commonsense__ar": "RUNNING"
+  "gpt-oss-20b__commonsense__ar": "DONE",
+  "gpt-oss-20b__commonsense__hi": "RUNNING"
 }
