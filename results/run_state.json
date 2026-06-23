@@ -87,6 +87,7 @@
   "llama4-scout__code__es": "DONE",
   "llama4-scout__code__de": "DONE",
   "llama4-scout__code__fr": "DONE",
-  "gpt-oss-120b__commonsense__fi": "RUNNING",
-  "gpt-oss-20b__commonsense__ko": "RUNNING"
+  "gpt-oss-120b__commonsense__fi": "DONE",
+  "gpt-oss-20b__commonsense__ko": "RUNNING",
+  "gpt-oss-120b__commonsense__ko": "RUNNING"
 }
