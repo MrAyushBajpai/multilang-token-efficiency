@@ -93,5 +93,6 @@
   "gpt-oss-120b__commonsense__sw": "RUNNING",
   "gpt-oss-20b__commonsense__sw": "RUNNING",
   "llama3.1-8b__commonsense__fi": "DONE",
-  "llama3.1-8b__commonsense__ko": "RUNNING"
+  "llama3.1-8b__commonsense__ko": "DONE",
+  "llama3.1-8b__commonsense__sw": "RUNNING"
 }
