@@ -98,5 +98,6 @@
   "llama3.3-70b__math__de": "RUNNING",
   "llama3.1-8b__commonsense__es": "DONE",
   "llama3.1-8b__commonsense__tr": "DONE",
-  "llama3.1-8b__commonsense__de": "RUNNING"
+  "llama3.1-8b__commonsense__de": "DONE",
+  "llama3.1-8b__commonsense__fr": "RUNNING"
 }
