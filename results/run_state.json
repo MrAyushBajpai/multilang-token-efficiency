@@ -109,5 +109,6 @@
   "gpt-oss-120b__commonsense__de": "RUNNING",
   "gpt-oss-20b__commonsense__es": "DONE",
   "gpt-oss-20b__commonsense__tr": "DONE",
-  "gpt-oss-20b__commonsense__de": "RUNNING"
+  "gpt-oss-20b__commonsense__de": "DONE",
+  "gpt-oss-20b__commonsense__fr": "RUNNING"
 }
