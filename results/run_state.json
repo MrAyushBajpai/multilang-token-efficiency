@@ -101,5 +101,6 @@
   "llama3.1-8b__commonsense__de": "DONE",
   "llama3.1-8b__commonsense__fr": "DONE",
   "llama3.1-8b__code__en": "DONE",
-  "llama3.1-8b__code__zh": "RUNNING"
+  "llama3.1-8b__code__zh": "DONE",
+  "llama3.1-8b__code__ar": "RUNNING"
 }
