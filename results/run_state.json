@@ -106,10 +106,11 @@
   "llama3.3-70b__math__fr": "RUNNING",
   "gpt-oss-120b__commonsense__es": "DONE",
   "gpt-oss-120b__commonsense__tr": "DONE",
-  "gpt-oss-120b__commonsense__de": "RUNNING",
+  "gpt-oss-120b__commonsense__de": "DONE",
   "gpt-oss-20b__commonsense__es": "DONE",
   "gpt-oss-20b__commonsense__tr": "DONE",
   "gpt-oss-20b__commonsense__de": "DONE",
   "gpt-oss-20b__commonsense__fr": "DONE",
-  "gpt-oss-20b__code__en": "RUNNING"
+  "gpt-oss-20b__code__en": "RUNNING",
+  "gpt-oss-120b__commonsense__fr": "RUNNING"
 }
