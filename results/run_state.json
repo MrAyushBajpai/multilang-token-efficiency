@@ -125,5 +125,6 @@
   "llama3.3-70b__commonsense__hi": "RUNNING",
   "llama3.1-8b__code__ko": "DONE",
   "llama3.1-8b__code__sw": "FAILED:too_many_errors:10",
-  "gpt-oss-20b__code__ar": "RUNNING"
+  "gpt-oss-20b__code__ar": "DONE",
+  "gpt-oss-20b__code__hi": "RUNNING"
 }
