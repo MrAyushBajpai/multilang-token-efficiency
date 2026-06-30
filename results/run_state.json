@@ -127,6 +127,7 @@
   "llama3.1-8b__code__sw": "RUNNING",
   "gpt-oss-20b__code__ar": "DONE",
   "gpt-oss-20b__code__hi": "DONE",
-  "gpt-oss-120b__code__hi": "RUNNING",
-  "gpt-oss-20b__code__fi": "RUNNING"
+  "gpt-oss-120b__code__hi": "DONE",
+  "gpt-oss-20b__code__fi": "RUNNING",
+  "gpt-oss-120b__code__fi": "RUNNING"
 }
