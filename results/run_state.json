@@ -134,5 +134,6 @@
   "llama3.1-8b__code__tr": "DONE",
   "llama3.1-8b__code__de": "DONE",
   "llama3.1-8b__code__fr": "DONE",
-  "llama3.3-70b__commonsense__fi": "RUNNING"
+  "llama3.3-70b__commonsense__fi": "DONE",
+  "llama3.3-70b__commonsense__ko": "RUNNING"
 }
