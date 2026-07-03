@@ -140,5 +140,6 @@
   "gpt-oss-120b__code__sw": "DONE",
   "gpt-oss-20b__code__ko": "RUNNING",
   "llama3.3-70b__commonsense__sw": "RUNNING",
-  "gpt-oss-120b__code__es": "RUNNING"
+  "gpt-oss-120b__code__es": "DONE",
+  "gpt-oss-120b__code__tr": "RUNNING"
 }
