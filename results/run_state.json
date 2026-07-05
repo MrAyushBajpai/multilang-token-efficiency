@@ -150,5 +150,5 @@
   "llama3.3-70b__commonsense__de": "RUNNING",
   "gpt-oss-20b__code__tr": "DONE",
   "gpt-oss-20b__code__de": "RUNNING",
-  "gpt-oss-120b__code__fr": "RUNNING"
+  "gpt-oss-120b__code__fr": "DONE"
 }
