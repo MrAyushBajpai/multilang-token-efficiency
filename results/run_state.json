@@ -154,5 +154,9 @@
   "llama3.3-70b__commonsense__fr": "DONE",
   "gpt-oss-20b__code__fr": "DONE",
   "llama3.3-70b__code__en": "DONE",
-  "llama3.3-70b__code__zh": "RUNNING"
+  "llama3.3-70b__code__zh": "DONE",
+  "llama3.3-70b__code__ar": "RUNNING",
+  "llama3.3-70b__code__hi": "FAILED:too_many_errors:10",
+  "llama3.3-70b__code__fi": "FAILED:too_many_errors:10",
+  "llama3.3-70b__code__ko": "RUNNING"
 }
