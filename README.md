@@ -188,7 +188,11 @@ If you use this code, please give credit to the author.
 
 ## Related Work
 
-- EfficientXLang (Ahuja et al., 2025) — multilingual math reasoning, cross-lingual token efficiency
-- Mythbuster (Ren et al., 2026) — Chinese vs. English token cost and problem-solving rate for "vibe coding" tasks on closed models (MiniMax-2.7, GPT-5.4-mini, GLM-5)
-- PolyMath (2025) — multilingual mathematical reasoning benchmark; includes a preliminary analysis of how "thinking length" varies by language across reasoning and non-reasoning LLMs, noting multilingual reasoning efficiency remains underexplored
-- Petrov et al. (2023) — tokenizer fairness across languages
+- **EfficientXLang** (Ahuja et al., 2025) — multilingual math reasoning, cross-lingual token efficiency.
+- **Mythbuster** (Ren et al., 2026) — Chinese vs. English token cost and problem-solving rate for "vibe coding" tasks on closed models (MiniMax-2.7, GPT-5.4-mini, GLM-5).
+- **PolyMath** (2025) — multilingual mathematical reasoning benchmark; includes a preliminary analysis of how "thinking length" varies by language across reasoning and non-reasoning LLMs.
+- **The Token Tax: Systematic Bias in Multilingual Tokenization** (2026) — evaluates African languages on MMLU, demonstrating that higher token fertility reliably predicts lower accuracy and quadrupled training/inference costs.
+- **TokLens: A Multilingual Lens on Tokenizer Quality for LLMs** (2026) — open-source toolkit evaluating intrinsic tokenizer quality (fertility, characters per token) across languages and correlating it with downstream benchmark performance.
+- **Tokenization Disparities as Infrastructure Bias** (2025) — large-scale cross-linguistic evaluation of tokenization efficiency across 200+ languages, confirming systematic structural inequities.
+- **Less Languages, Less Tokens (UL-XCoT)** (2026) — proposes a dynamic decoding and pruning algorithm for Cross-lingual Chain-of-Thought (XCoT) to reduce the massive token costs of multilingual math reasoning.
+- **Petrov et al.** (2023) — early foundational work on tokenizer fairness across languages showing up to 15x disparities in encoding lengths.
