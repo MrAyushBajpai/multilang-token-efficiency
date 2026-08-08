@@ -104,7 +104,7 @@ def load_summary_df(results_dir: str) -> pd.DataFrame:
             df["avg_cost_per_attempt_usd"] = float("nan")
             df["ceff_usd"]                 = float("nan")
 
-        print(f"  Loaded {len(records)} raw records → {len(df)} run rows.")
+        print(f"  Loaded {len(records)} raw records -> {len(df)} run rows.")
 
     else:
         summary_path = results_path / "summary.csv"
@@ -184,7 +184,7 @@ def plot_token_bars(df: pd.DataFrame, output_dir: str) -> None:
             ax.set_xlabel("Language")
             if ax is axes[0]:
                 ax.set_ylabel("Mean Completion Tokens")
-            ax.tick_params(axis="x", rotation=35)
+            plt.setp(ax.get_xticklabels(), rotation=35, ha="right", rotation_mode="anchor")
             ax.yaxis.set_major_formatter(
                 mtick.FuncFormatter(lambda x, _: f"{int(x):,}")
             )
@@ -286,7 +286,7 @@ def plot_truncation_rates(df: pd.DataFrame, output_dir: str) -> None:
     ax.set_xlabel("Model / Task")
     ax.yaxis.set_major_formatter(mtick.PercentFormatter(xmax=1, decimals=1))
     ax.legend(title="Language", bbox_to_anchor=(1.01, 1), loc="upper left")
-    ax.tick_params(axis="x", rotation=45)
+    plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
     plt.tight_layout()
     out = Path(output_dir) / "truncation_rates.png"
     plt.savefig(out, dpi=150, bbox_inches="tight")
@@ -317,7 +317,7 @@ def plot_ceff_comparison(df: pd.DataFrame, output_dir: str) -> None:
     ax.set_ylabel("Ceff Ratio")
     ax.set_xlabel("Model / Task")
     ax.legend(title="Language", bbox_to_anchor=(1.01, 1), loc="upper left")
-    ax.tick_params(axis="x", rotation=45)
+    plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
     plt.tight_layout()
     out = Path(output_dir) / "ceff_comparison.png"
     plt.savefig(out, dpi=150, bbox_inches="tight")
@@ -390,14 +390,14 @@ def main() -> None:
 
     print_tables(df, args.results_dir)
 
-    print("\nGenerating plots …")
+    print("\nGenerating plots ...")
     plot_token_bars(df, args.plots_dir)
     plot_accuracy_vs_tokens(df, args.plots_dir)
     plot_efficiency_heatmap(df, args.plots_dir)
     plot_truncation_rates(df, args.plots_dir)
     plot_ceff_comparison(df, args.plots_dir)
 
-    print(f"\nDone.  Tables → {args.results_dir}/   Plots → {args.plots_dir}/")
+    print(f"\nDone.  Tables -> {args.results_dir}/   Plots -> {args.plots_dir}/")
 
 
 if __name__ == "__main__":
