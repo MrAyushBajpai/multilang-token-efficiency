@@ -1,28 +1,34 @@
 """
 rerun_missing_records.py
 =========================
-llama3_3-70b__commonsense__tr.jsonl has 99/100 records -- idx=99 is
-missing (almost certainly dropped by the `continue` on API error in
-run_experiment.py's main loop).
+Scans every *.jsonl in results_dir for gaps in idx 0..n_samples-1.
+For any missing record, makes the Groq API call, builds the record in the
+EXACT same shape as run_experiment.py's current schema, appends it to the
+JSONL, and updates the corresponding row in summary.csv.
 
-This script makes the ONE missing Groq API call, builds the record in
-the exact same shape as run_experiment.py, appends it to the JSONL,
-and updates the corresponding row in summary.csv in place (n: 99->100,
-recomputed accuracy / token stats / ceff).
+Changes from original:
+  - n_samples default bumped 100 → 500 (experiment now uses 500)
+  - Removed all REASONING_MODELS / use_reasoning references (no reasoning
+    models in the current model registry)
+  - GROQ_API_KEY is now read from env directly (it's not a module-level var
+    in run_experiment.py)
+  - call_groq() signature no longer takes use_reasoning
+  - Record schema aligned with run_experiment.py's current fields
+  - SYSTEM_PROMPTS.format() now passes both `language` and
+    `lang_self_instruction` kwargs (required by the template)
+  - user_prompt mirrors run_experiment.py: prepend native-lang instruction
+    for non-English conditions
 
-Run this from the SAME directory as your run_experiment.py (it imports
-from it directly), with your .env / GROQ_API_KEY set up as before:
+Run from the experiment root (same dir as run_experiment.py):
 
-    python3 rerun_missing_records.py --results_dir results
-
-It's generalized to scan every *.jsonl in results_dir for gaps in
-idx 0..n_samples-1, not just this one file -- if everything else is
-already complete it'll just report "no gaps found" for those.
+    python rerun_missing_records.py --results_dir results
 """
 
 import argparse
 import csv
 import json
+import os
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -39,11 +45,24 @@ def find_gaps(records, n_samples):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--results_dir", default="results")
-    parser.add_argument("--n_samples", type=int, default=100)
+    parser.add_argument(
+        "--n_samples", type=int, default=500,
+        help="Expected number of records per file (default: 500)",
+    )
     args = parser.parse_args()
 
     results_path = Path(args.results_dir)
     summary_path = results_path / "summary.csv"
+
+    # Read API key from env (not a module-level var in run_experiment.py)
+    api_key = os.environ.get("GROQ_API_KEY", "")
+    if not api_key or api_key == "YOUR_GROQ_API_KEY_HERE":
+        raise SystemExit(
+            "GROQ_API_KEY not set. "
+            "Add it to your .env file or set it as an environment variable."
+        )
+
+    found_any_gap = False
 
     for f in sorted(results_path.glob("*.jsonl")):
         records = [json.loads(l) for l in open(f, encoding="utf-8") if l.strip()]
@@ -54,44 +73,72 @@ def main():
         if not gaps:
             continue
 
+        found_any_gap = True
         model = records[0]["model"]
-        task = records[0]["task"]
-        lang = records[0]["language"]
-        lang_name = exp.LANGUAGES[lang]
-        model_id = exp.MODELS[model]
-        use_reasoning = model_id in exp.REASONING_MODELS
-        checker = exp.CHECKERS[task]
+        task  = records[0]["task"]
+        lang  = records[0]["language"]
 
-        print(f"{f.name}: missing idx {gaps} -- fetching {len(gaps)} record(s)")
+        lang_name = exp.LANGUAGES[lang]
+        model_id  = exp.MODELS[model]
+        checker   = exp.CHECKERS[task]
+
+        print(f"{f.name}: missing idx {gaps} — fetching {len(gaps)} record(s)")
 
         dataset = get_dataset(task, n_samples=args.n_samples)
-        client = exp.Groq(api_key=exp.GROQ_API_KEY)
+        client  = exp.Groq(api_key=api_key)
 
         for i in gaps:
             item = dataset[i]
-            sys_prompt = exp.SYSTEM_PROMPTS[task].format(language=lang_name)
-            user_prompt = item["question"]
 
-            result = exp.call_groq(
-                client, model_id, sys_prompt, user_prompt, use_reasoning=use_reasoning
+            # Mirror run_experiment.py's prompt construction exactly
+            lang_prefix = exp.LANG_SELF_INSTRUCTION.get(lang, "")
+            sys_prompt  = exp.SYSTEM_PROMPTS[task].format(
+                language=lang_name,
+                lang_self_instruction=lang_prefix,
             )
+            user_prompt = (
+                f"{lang_prefix}\n\n{item['question']}"
+                if lang_prefix and lang != "en"
+                else item["question"]
+            )
+
+            result = exp.call_groq(client, model_id, sys_prompt, user_prompt)
+
             if result["error"]:
-                print(f"  idx={i}: ERROR: {result['error']} -- skipping, try again later")
+                print(f"  idx={i}: ERROR: {result['error']} — skipping, try again later")
                 continue
 
             is_correct = checker(result["content"], item["answer"])
+
+            # Schema matches run_experiment.py's current record layout
             record = {
-                "idx": i, "model": model, "task": task, "language": lang,
-                "question_id": item.get("id", i),
-                "system_prompt": sys_prompt, "user_prompt": user_prompt,
-                "response": result["content"], "reasoning": result["reasoning_text"],
-                "expected_answer": item["answer"], "correct": is_correct,
-                "prompt_tokens": result["prompt_tokens"],
+                "idx":               i,
+                "model":             model,
+                "task":              task,
+                "language":          lang,
+                "question_id":       item.get("id", str(i)),
+                # ── input / output ──
+                "system_prompt":     sys_prompt,
+                "user_prompt":       user_prompt,
+                "response":          result["content"],
+                "expected_answer":   str(item["answer"]),
+                "correct":           is_correct,
+                # ── token counts ──
+                "prompt_tokens":     result["prompt_tokens"],
                 "completion_tokens": result["completion_tokens"],
-                "total_tokens": result["total_tokens"],
-                "reasoning_tokens": result["reasoning_tokens_est"],
-                "latency_s": result["latency_s"],
-                "response_length": len(result["content"]),
+                "total_tokens":      result["total_tokens"],
+                # ── timing ──
+                "latency_s":         result["latency_s"],
+                "completion_time":   result["completion_time"],
+                "prompt_time":       result["prompt_time"],
+                "queue_time":        result["queue_time"],
+                # ── meta ──
+                "finish_reason":     result["finish_reason"],
+                "response_length":   len(result["content"]),
+                "model_id":          model_id,
+                "max_tokens_cap":    exp.MAX_COMPLETION_TOKENS,
+                "temperature":       exp.TEMPERATURE,
+                "timestamp_utc":     time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
             }
             records.append(record)
             status = "correct" if is_correct else "incorrect"
@@ -102,10 +149,14 @@ def main():
             for r in records:
                 fh.write(json.dumps(r, ensure_ascii=False) + "\n")
 
-        # update summary.csv in place
+        # Update summary.csv row
         m = compute_metrics(records)
-        update_summary_row(summary_path, model, task, lang, m)
-        print(f"  -> {f.name} now has {len(records)} records; summary.csv updated.\n")
+        if summary_path.exists():
+            update_summary_row(summary_path, model, task, lang, m)
+        print(f"  → {f.name} now has {len(records)} records; summary updated.\n")
+
+    if not found_any_gap:
+        print("No gaps found — all files already have the expected number of records.")
 
 
 def update_summary_row(summary_path, model, task, lang, m):
@@ -115,8 +166,8 @@ def update_summary_row(summary_path, model, task, lang, m):
         header = next(reader)
         rows.append(header)
         for row in reader:
-            if row[1:5] == [f"{model}__{task}__{lang}", model, task, lang] or \
-               (row[2], row[3], row[4]) == (model, task, lang):
+            # Match by (model, task, lang) columns regardless of column position
+            if len(row) >= 5 and (row[2], row[3], row[4]) == (model, task, lang):
                 row = [
                     datetime.now(timezone.utc).isoformat(),
                     row[1], model, task, lang,
