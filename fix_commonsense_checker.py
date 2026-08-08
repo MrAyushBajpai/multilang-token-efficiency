@@ -37,9 +37,34 @@ COMMONSENSE_PATTERNS = [
 
 MATH_ANSWER_PAT = re.compile(r'\*{0,2}answer\s*:\*{0,2}\s*([\d\.\-]+)', re.IGNORECASE)
 
+_TRAILING_MARKER = re.compile(r'[:：]\s*\**\s*$')
+
+
+def _join_split_marker_lines(response):
+    """Some models put the answer marker on its own line and the value
+    (a bare letter/number) on the next line, e.g. 'Answer:\\nD'. The
+    line-by-line scanners below need marker+value on one line, so merge
+    a marker-ending line with the following non-empty line first."""
+    lines = response.strip().splitlines()
+    out, i = [], 0
+    while i < len(lines):
+        cur = lines[i].rstrip()
+        if _TRAILING_MARKER.search(cur) and cur.strip("* ").strip():
+            j = i + 1
+            while j < len(lines) and not lines[j].strip():
+                j += 1
+            if j < len(lines):
+                out.append(cur + " " + lines[j].strip())
+                i = j + 1
+                continue
+        out.append(lines[i])
+        i += 1
+    return "\n".join(out)
+
 
 def extract_commonsense_letter(response):
     """Bottom-up scan for any answer marker."""
+    response = _join_split_marker_lines(response)
     for line in reversed(response.strip().splitlines()):
         for pat in COMMONSENSE_PATTERNS:
             m = re.search(pat, line, re.IGNORECASE)
@@ -50,6 +75,7 @@ def extract_commonsense_letter(response):
 
 def extract_math_number(response):
     """Bottom-up scan for Answer: <number>, including bold variants."""
+    response = _join_split_marker_lines(response)
     for line in reversed(response.strip().splitlines()):
         m = MATH_ANSWER_PAT.search(line)
         if m:

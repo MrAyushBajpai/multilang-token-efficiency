@@ -92,6 +92,7 @@ def load_summary_df(results_dir: str) -> pd.DataFrame:
         summary_path = results_path / "summary.csv"
         if summary_path.exists():
             sdf = pd.read_csv(summary_path)
+            sdf = sdf.drop_duplicates(subset=["model", "task", "language"])
             cost_cols = [c for c in ["avg_cost_per_attempt_usd", "ceff_usd"]
                          if c in sdf.columns]
             if cost_cols:
@@ -153,12 +154,9 @@ def compute_ratio_table(
 def plot_token_bars(df: pd.DataFrame, output_dir: str) -> None:
     for model in df["model"].unique():
         mdf   = df[df["model"] == model]
-        tasks = [t for t in TASKS if not mdf[mdf["task"] == t].empty]
+        tasks = [t for t in ["math", "commonsense", "code"] if not mdf[mdf["task"] == t].empty]
         if not tasks:
             continue
-
-        TASKS = ["math", "commonsense", "code"]
-        tasks = [t for t in TASKS if not mdf[mdf["task"] == t].empty]
 
         fig, axes = plt.subplots(1, len(tasks), figsize=(5 * len(tasks), 5), sharey=False)
         if len(tasks) == 1:

@@ -157,12 +157,19 @@ def _load_from_hf(task: str, n: int, seed: int) -> List[Dict[str, Any]]:
         problems = []
         for i, r in enumerate(ds):
             choices = r["choices"]["text"]
-            labels  = r["choices"]["label"]
+            # ai2_arc labels are inconsistent per-question: some questions use
+            # "A".."D", others use "1".."4". The prompt always instructs the
+            # model to answer with a letter, so normalize to A/B/C/D by
+            # ordinal position instead of passing the raw label through --
+            # otherwise numeric-label questions score every correct letter
+            # answer as wrong (letter response vs numeric expected_answer).
+            labels = [chr(ord("A") + i) for i in range(len(choices))]
             options = "\n".join(f"{l}) {t}" for l, t in zip(labels, choices))
+            answer_idx = r["choices"]["label"].index(r["answerKey"])
             problems.append({
                 "id":       r["id"],
                 "question": f"{r['question']}\n{options}",
-                "answer":   r["answerKey"],
+                "answer":   labels[answer_idx],
             })
         return problems
 
