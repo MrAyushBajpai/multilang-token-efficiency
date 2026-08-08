@@ -116,7 +116,7 @@ def _save_cache(task: str, problems: List[Dict[str, Any]]) -> None:
     with open(path, "w", encoding="utf-8") as f:
         for p in problems:
             f.write(json.dumps(p, ensure_ascii=False) + "\n")
-    print(f"  [dataset] Cached {len(problems)} {task} problems → {path}")
+    print(f"  [dataset] Cached {len(problems)} {task} problems -> {path}")
 
 
 def _load_cache(task: str, n: int) -> List[Dict[str, Any]] | None:
