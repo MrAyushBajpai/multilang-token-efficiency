@@ -231,8 +231,8 @@ def main() -> None:
             )
 
     df.to_csv(args.out, index=False)
-    print(f"\nFull results    → {args.out}")
-    print(f"English-only    → mcnemar_vs_english.csv")
+    print(f"\nFull results    -> {args.out}")
+    print(f"English-only    -> mcnemar_vs_english.csv")
 
 
 if __name__ == "__main__":
