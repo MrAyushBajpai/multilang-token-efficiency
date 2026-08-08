@@ -2,22 +2,18 @@
 rerun_truncated.py
 ------------------
 Finds every record with finish_reason == "length" across all JSONL run files,
-reruns those specific questions with a doubling token limit until the response
-finishes cleanly or Groq rejects the request, then updates the JSONL files and
-summary.csv in-place.
+reruns those specific questions at a fixed 8000-token cap, then updates the
+JSONL files and summary.csv in-place.
 
 Usage
 -----
-    python rerun_truncated.py [--results_dir results] [--max_cap 80000] [--dry_run]
+    python rerun_truncated.py [--results_dir results] [--dry_run]
 
 Algorithm per truncated record
 -------------------------------
-1. Start at cap = max(record["max_tokens_cap"] * 2, INITIAL_DOUBLE_CAP).
-2. Call Groq with that cap.
-3. If finish_reason == "length": double cap and retry (up to MAX_DOUBLINGS).
-4. If Groq raises a context-window / token-limit APIError: stop for this record
-   (the model/API cannot handle the size; keep the old record unchanged).
-5. If a clean finish is received: replace the old record in the JSONL and
+1. Call Groq at FIXED_CAP (8000) — the actual API max in use.
+2. If Groq raises a context-window / token-limit APIError: keep the old record.
+3. If a clean finish is received: replace the old record in the JSONL and
    recompute the summary.csv row for that run.
 
 JSONL update strategy
@@ -58,21 +54,30 @@ except ImportError:
     raise SystemExit("groq package not installed.  Run: pip install groq")
 
 # ── Constants ─────────────────────────────────────────────────────────────────
-INITIAL_DOUBLE_CAP  = 10_000   # minimum starting cap when rerunning
-MAX_DOUBLINGS       = 4        # 10k → 20k → 40k → 80k → 160k (5 attempts max)
-TEMPERATURE         = 0.0
-RETRY_BASE_DELAY    = 15       # seconds, doubles on rate-limit
-MAX_RETRIES         = 6
-INTER_QUESTION_DELAY = 1.2     # courtesy delay between API calls
+FIXED_CAP            = 8_000  # hard token cap for all reruns
+TEMPERATURE          = 0.0
+RETRY_BASE_DELAY     = 15     # seconds, doubles on rate-limit
+MAX_RETRIES          = 6
+INTER_QUESTION_DELAY = 1.2    # courtesy delay between API calls
 
 # Groq context-window error substrings (adjust if Groq changes wording)
+# NOTE: "token limit" was removed -- that substring also matches TPM 413
+# errors which are handled separately via safe_cap computation below.
 CONTEXT_WINDOW_ERRORS = (
     "context_length_exceeded",
     "maximum context length",
-    "token limit",
     "reduce the length",
     "too many tokens",
 )
+
+# Groq free-tier TPM limits per model (tokens per minute = prompt + completion).
+# Only models with limits <= FIXED_CAP need to be listed here; others are
+# effectively unconstrained relative to our cap.
+MODEL_TPM_LIMIT: dict[str, int] = {
+    "llama3.1-8b":  6_000,
+    "gpt-oss-20b":  8_000,
+    "gpt-oss-120b": 8_000,
+}
 
 # ── Model ID map (must match run_experiment.py) ───────────────────────────────
 MODELS: dict[str, str] = {
@@ -96,7 +101,7 @@ def _load_checkers():
         spec = importlib.util.spec_from_file_location(
             "run_experiment", HERE / "run_experiment.py"
         )
-        mod = importlib.util.load_from_spec(spec)  # type: ignore[attr-defined]
+        mod = importlib.util.module_from_spec(spec)  # type: ignore[attr-defined]
         spec.loader.exec_module(mod)  # type: ignore[union-attr]
         CHECKERS.update(mod.CHECKERS)
     except Exception as e:
@@ -138,43 +143,7 @@ def _load_checkers():
         CHECKERS.update({"math": check_math, "commonsense": check_commonsense, "code": check_code})
 
 
-# ── Groq call with doubling-cap loop ─────────────────────────────────────────
-
-def call_groq_with_doubling(
-    client: "Groq",
-    model_id: str,
-    system_prompt: str,
-    user_prompt: str,
-    start_cap: int,
-    max_doublings: int = MAX_DOUBLINGS,
-) -> tuple[dict | None, int]:
-    """
-    Try the API call starting at `start_cap` tokens, doubling on truncation.
-
-    Returns (result_dict, final_cap_used).
-    result_dict is None if a hard context-window error was hit (give up).
-    result_dict["finish_reason"] == "length" means we exhausted all doublings.
-    """
-    cap = start_cap
-    for attempt_num in range(max_doublings + 1):
-        result = _call_once(client, model_id, system_prompt, user_prompt, cap)
-
-        if result is None:
-            # Hard context-window error — cannot go further
-            return None, cap
-
-        if result["finish_reason"] != "length":
-            # Clean finish (or other non-truncation finish)
-            return result, cap
-
-        # Still truncated — double and retry (unless we've exhausted doublings)
-        if attempt_num < max_doublings:
-            cap *= 2
-            print(f"    [trunc] still truncated at cap={cap//2}; retrying with cap={cap} …")
-            time.sleep(INTER_QUESTION_DELAY)
-        # else: fall through and return the last truncated result
-
-    return result, cap  # type: ignore[return-value]  # truncated after all doublings
+# ── Groq call (fixed cap) ─────────────────────────────────────────────────────
 
 
 def _call_once(
@@ -290,12 +259,14 @@ def compute_metrics_inline(records: list[dict]) -> dict:
     import math
 
     TOKEN_PRICE_PER_M = {
-        "llama3.3-70b": {"input": 0.59, "output": 0.79},
-        "llama4-scout":  {"input": 0.11, "output": 0.34},
-        "llama3.1-8b":   {"input": 0.05, "output": 0.08},
-        "llama3.2-3b":   {"input": 0.06, "output": 0.06},
-        "gemma2-9b":     {"input": 0.20, "output": 0.20},
-        "mistral-saba":  {"input": 0.79, "output": 0.79},
+        "llama3.3-70b": {"input": 0.59,  "output": 0.79},
+        "llama4-scout":  {"input": 0.11,  "output": 0.34},
+        "llama3.1-8b":   {"input": 0.05,  "output": 0.08},
+        "gpt-oss-20b":   {"input": 0.075, "output": 0.30},
+        "gpt-oss-120b":  {"input": 0.15,  "output": 0.60},
+        "llama3.2-3b":   {"input": 0.06,  "output": 0.06},
+        "gemma2-9b":     {"input": 0.20,  "output": 0.20},
+        "mistral-saba":  {"input": 0.79,  "output": 0.79},
     }
 
     def _mean(lst):   return sum(lst)/len(lst) if lst else 0.0
@@ -436,7 +407,6 @@ def update_summary_csv(summary_path: Path, run_key: str, records: list[dict]) ->
 
 def rerun_truncated(
     results_dir: str = "results",
-    max_cap: int = 160_000,
     dry_run: bool = False,
 ) -> None:
     _load_checkers()
@@ -450,6 +420,8 @@ def rerun_truncated(
     client       = Groq(api_key=api_key)
     results_path = Path(results_dir)
     summary_path = results_path / "summary.csv"
+
+    print(f"Rerunning truncated records at fixed cap={FIXED_CAP} tokens.")
 
     jsonl_files = sorted(results_path.glob("*.jsonl"))
     if not jsonl_files:
@@ -472,11 +444,11 @@ def rerun_truncated(
         if not truncated_indices:
             continue
 
-        print(f"\n{'─'*70}")
+        print(f"\n{'-'*70}")
         print(f"Run: {run_key}  |  truncated: {len(truncated_indices)}/{len(records)}")
 
         total_truncated += len(truncated_indices)
-        run_modified = False
+        file_fixed = 0
 
         for list_pos, (rec_idx, old_record) in enumerate(truncated_indices, 1):
             idx        = old_record.get("idx", rec_idx)
@@ -485,36 +457,28 @@ def rerun_truncated(
             model_id   = MODELS.get(model_key, model_key)
             checker    = CHECKERS.get(task)
 
-            old_cap    = old_record.get("max_tokens_cap", 5000)
-            start_cap  = max(old_cap * 2, INITIAL_DOUBLE_CAP)
+            # Compute a cap that won't exceed this model's TPM budget.
+            # prompt_tokens is known from the old record; safe_cap ensures
+            # prompt + completion <= tpm_limit.
+            old_prompt_toks = old_record.get("prompt_tokens", 0)
+            tpm_limit = MODEL_TPM_LIMIT.get(model_key, 999_999)
+            safe_cap = min(FIXED_CAP, max(1, tpm_limit - old_prompt_toks))
 
-            print(f"  [{list_pos}/{len(truncated_indices)}] idx={idx}  "
-                  f"old_cap={old_cap}  start_cap={start_cap}")
+            print(f"  [{list_pos}/{len(truncated_indices)}] idx={idx}  cap={safe_cap}"
+                  + (f"  (TPM-limited from {FIXED_CAP})" if safe_cap < FIXED_CAP else ""))
 
             if dry_run:
-                print(f"    [dry-run] would rerun with start_cap={start_cap}")
+                print(f"    [dry-run] would rerun with cap={safe_cap}")
                 continue
 
-            if start_cap > max_cap:
-                print(f"    [skip] start_cap={start_cap} already exceeds max_cap={max_cap}")
-                total_gave_up += 1
-                continue
-
-            # Compute how many doublings are allowed before hitting max_cap
-            allowed_doublings = 0
-            cap = start_cap
-            while cap * 2 <= max_cap and allowed_doublings < MAX_DOUBLINGS:
-                cap *= 2
-                allowed_doublings += 1
-
-            result, final_cap = call_groq_with_doubling(
+            result = _call_once(
                 client,
                 model_id,
                 old_record.get("system_prompt",""),
                 old_record.get("user_prompt",""),
-                start_cap=start_cap,
-                max_doublings=allowed_doublings,
+                safe_cap,
             )
+            final_cap = safe_cap
 
             if result is None:
                 print(f"    [give-up] context-window error at cap={final_cap}; keeping old record.")
@@ -553,47 +517,46 @@ def rerun_truncated(
                 "timestamp_utc":     time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                 # Provenance fields
                 "rerun":             True,
-                "rerun_prev_cap":    old_cap,
-                "rerun_final_cap":   final_cap,
+                "rerun_prev_cap":    old_record.get("max_tokens_cap", 5000),
             })
 
             records[rec_idx] = new_record
-            run_modified = True
             total_fixed += 1
+            file_fixed += 1
+
+            # Write immediately — crash/rate-limit safe.
+            # On resume, fixed records have finish_reason != "length" so
+            # they are naturally skipped by the truncated_indices scan.
+            save_jsonl_atomic(jsonl_path, records)
 
             status = "✓" if is_correct else "✗"
             print(f"    {status} finish_reason={result['finish_reason']}  "
-                  f"comp={result['completion_tokens']}  cap={final_cap}")
+                  f"comp={result['completion_tokens']}  cap={final_cap}  [saved]")
 
             time.sleep(INTER_QUESTION_DELAY)
 
-        if run_modified and not dry_run:
-            save_jsonl_atomic(jsonl_path, records)
-            print(f"  [saved] {jsonl_path.name}")
+        if file_fixed > 0 and not dry_run:
             update_summary_csv(summary_path, run_key, records)
+            print(f"  [csv] summary updated for {run_key}")
 
-    print(f"\n{'='*70}")
+    print(f"\n{'='*70}")  # ASCII = is cp1252-safe
     print(f"Rerun complete.")
     print(f"  Truncated found : {total_truncated}")
     print(f"  Fixed (clean)   : {total_fixed}")
     print(f"  Gave up         : {total_gave_up}")
     if dry_run:
-        print("  (DRY RUN — no files were modified)")
+        print("  (DRY RUN -- no files were modified)")
 
 
 # ── CLI ───────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Rerun truncated responses with doubling token limits."
+        description="Rerun truncated responses at a fixed 8000-token cap."
     )
     parser.add_argument(
         "--results_dir", default="results",
         help="Directory containing JSONL files and summary.csv (default: results)"
-    )
-    parser.add_argument(
-        "--max_cap", type=int, default=160_000,
-        help="Hard upper bound on max_completion_tokens (default: 160000)"
     )
     parser.add_argument(
         "--dry_run", action="store_true",
@@ -603,6 +566,5 @@ if __name__ == "__main__":
 
     rerun_truncated(
         results_dir=args.results_dir,
-        max_cap=args.max_cap,
         dry_run=args.dry_run,
     )
