@@ -407,6 +407,7 @@ def update_summary_csv(summary_path: Path, run_key: str, records: list[dict]) ->
 
 def rerun_truncated(
     results_dir: str = "results",
+    models:      list[str] | None = None,
     dry_run: bool = False,
 ) -> None:
     _load_checkers()
@@ -421,7 +422,8 @@ def rerun_truncated(
     results_path = Path(results_dir)
     summary_path = results_path / "summary.csv"
 
-    print(f"Rerunning truncated records at fixed cap={FIXED_CAP} tokens.")
+    print(f"Rerunning truncated records at fixed cap={FIXED_CAP} tokens."
+          + (f"  models={models}" if models else ""))
 
     jsonl_files = sorted(results_path.glob("*.jsonl"))
     if not jsonl_files:
@@ -433,7 +435,10 @@ def rerun_truncated(
     total_gave_up   = 0
 
     for jsonl_path in jsonl_files:
-        run_key = jsonl_path.stem
+        run_key   = jsonl_path.stem
+        model_key = run_key.split("__")[0]  # stem is model__task__lang
+        if models and model_key not in models:
+            continue
         records = load_jsonl(jsonl_path)
 
         truncated_indices = [
@@ -552,11 +557,16 @@ def rerun_truncated(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Rerun truncated responses at a fixed 8000-token cap."
+        description="Rerun truncated responses at a fixed token cap."
     )
     parser.add_argument(
         "--results_dir", default="results",
         help="Directory containing JSONL files and summary.csv (default: results)"
+    )
+    parser.add_argument(
+        "--models", nargs="+", choices=list(MODELS.keys()), default=None,
+        metavar="MODEL",
+        help="Only rerun these model(s). E.g. --models llama3.3-70b gpt-oss-120b"
     )
     parser.add_argument(
         "--dry_run", action="store_true",
@@ -566,5 +576,6 @@ if __name__ == "__main__":
 
     rerun_truncated(
         results_dir=args.results_dir,
+        models=args.models,
         dry_run=args.dry_run,
     )
