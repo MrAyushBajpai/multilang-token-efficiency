@@ -1,0 +1,199 @@
+
+==================================================
+1. COCHRAN'S Q TEST (Multi-Language Accuracy)
+==================================================
+Purpose: Tests if accuracy varies significantly across ALL 11 languages simultaneously.
+[gpt-oss-120b | code] Q-Stat: 61.77, p-value: 1.67084e-09 ***
+[gpt-oss-120b | commonsense] Q-Stat: 32.32, p-value: 3.54436e-04 ***
+[gpt-oss-120b | math] Q-Stat: 22.41, p-value: 1.31408e-02 *
+[gpt-oss-20b | code] Q-Stat: 55.07, p-value: 3.06957e-08 ***
+[gpt-oss-20b | commonsense] Q-Stat: 14.54, p-value: 1.49951e-01 
+[gpt-oss-20b | math] Q-Stat: 25.00, p-value: 5.34551e-03 *
+[llama3.1-8b | code] Q-Stat: 71.74, p-value: 2.03873e-11 ***
+[llama3.1-8b | commonsense] Q-Stat: 315.97, p-value: 6.49714e-62 ***
+[llama3.1-8b | math] Q-Stat: 187.68, p-value: 5.93369e-35 ***
+[llama3.3-70b | code] Q-Stat: 95.39, p-value: 4.54547e-16 ***
+[llama3.3-70b | commonsense] Q-Stat: 56.06, p-value: 2.00474e-08 ***
+[llama3.3-70b | math] Q-Stat: 24.84, p-value: 5.65320e-03 *
+[llama4-scout | code] Q-Stat: 110.12, p-value: 5.05715e-19 ***
+[llama4-scout | commonsense] Q-Stat: 734.33, p-value: 2.66337e-151 ***
+[llama4-scout | math] Q-Stat: 668.35, p-value: 3.89734e-137 ***
+
+==================================================
+2. WILCOXON SIGNED-RANK TEST (Token Lengths)
+==================================================
+Purpose: Tests if foreign languages use significantly more/less completion tokens than English for the same exact questions.
+[gpt-oss-120b | code | zh vs EN] Diff: +136.2 tokens. p-value: 8.11565e-52 ***
+[gpt-oss-120b | code | ar vs EN] Diff: +295.8 tokens. p-value: 5.06228e-75 ***
+[gpt-oss-120b | code | hi vs EN] Diff: +319.9 tokens. p-value: 2.42226e-78 ***
+[gpt-oss-120b | code | fi vs EN] Diff: +277.7 tokens. p-value: 3.24676e-75 ***
+[gpt-oss-120b | code | ko vs EN] Diff: +234.3 tokens. p-value: 2.11589e-72 ***
+[gpt-oss-120b | code | sw vs EN] Diff: +318.5 tokens. p-value: 1.34950e-76 ***
+[gpt-oss-120b | code | es vs EN] Diff: +216.1 tokens. p-value: 2.84436e-69 ***
+[gpt-oss-120b | code | tr vs EN] Diff: +262.8 tokens. p-value: 4.99445e-72 ***
+[gpt-oss-120b | code | de vs EN] Diff: +201.5 tokens. p-value: 1.73556e-66 ***
+[gpt-oss-120b | code | fr vs EN] Diff: +194.6 tokens. p-value: 6.83471e-67 ***
+[gpt-oss-120b | commonsense | zh vs EN] Diff: +274.9 tokens. p-value: 5.22130e-83 ***
+[gpt-oss-120b | commonsense | ar vs EN] Diff: +205.2 tokens. p-value: 9.16058e-83 ***
+[gpt-oss-120b | commonsense | hi vs EN] Diff: +231.6 tokens. p-value: 1.22037e-82 ***
+[gpt-oss-120b | commonsense | fi vs EN] Diff: +301.1 tokens. p-value: 3.75615e-83 ***
+[gpt-oss-120b | commonsense | ko vs EN] Diff: +260.6 tokens. p-value: 1.87264e-83 ***
+[gpt-oss-120b | commonsense | sw vs EN] Diff: +212.0 tokens. p-value: 4.90345e-82 ***
+[gpt-oss-120b | commonsense | es vs EN] Diff: +299.9 tokens. p-value: 2.57834e-83 ***
+[gpt-oss-120b | commonsense | tr vs EN] Diff: +221.1 tokens. p-value: 9.03503e-82 ***
+[gpt-oss-120b | commonsense | de vs EN] Diff: +259.0 tokens. p-value: 1.50870e-83 ***
+[gpt-oss-120b | commonsense | fr vs EN] Diff: +217.5 tokens. p-value: 4.64471e-83 ***
+[gpt-oss-120b | math | zh vs EN] Diff: +45.8 tokens. p-value: 3.25949e-37 ***
+[gpt-oss-120b | math | ar vs EN] Diff: +81.3 tokens. p-value: 1.52280e-56 ***
+[gpt-oss-120b | math | hi vs EN] Diff: +67.0 tokens. p-value: 1.22661e-47 ***
+[gpt-oss-120b | math | fi vs EN] Diff: +69.0 tokens. p-value: 1.01349e-51 ***
+[gpt-oss-120b | math | ko vs EN] Diff: +94.9 tokens. p-value: 5.34918e-67 ***
+[gpt-oss-120b | math | sw vs EN] Diff: +75.1 tokens. p-value: 4.02791e-57 ***
+[gpt-oss-120b | math | es vs EN] Diff: +92.4 tokens. p-value: 1.38017e-66 ***
+[gpt-oss-120b | math | tr vs EN] Diff: +73.2 tokens. p-value: 2.82862e-55 ***
+[gpt-oss-120b | math | de vs EN] Diff: +80.3 tokens. p-value: 1.43168e-59 ***
+[gpt-oss-120b | math | fr vs EN] Diff: +70.4 tokens. p-value: 2.12165e-49 ***
+[gpt-oss-20b | code | zh vs EN] Diff: +62.6 tokens. p-value: 1.77823e-09 ***
+[gpt-oss-20b | code | ar vs EN] Diff: +80.5 tokens. p-value: 4.46396e-12 ***
+[gpt-oss-20b | code | hi vs EN] Diff: +125.2 tokens. p-value: 3.82651e-19 ***
+[gpt-oss-20b | code | fi vs EN] Diff: +26.5 tokens. p-value: 3.60082e-05 ***
+[gpt-oss-20b | code | ko vs EN] Diff: +147.4 tokens. p-value: 5.06637e-24 ***
+[gpt-oss-20b | code | sw vs EN] Diff: +194.5 tokens. p-value: 3.48984e-27 ***
+[gpt-oss-20b | code | es vs EN] Diff: +18.4 tokens. p-value: 1.03716e-04 ***
+[gpt-oss-20b | code | tr vs EN] Diff: -27.1 tokens. p-value: 4.89865e-02 *
+[gpt-oss-20b | code | de vs EN] Diff: +81.5 tokens. p-value: 1.20047e-11 ***
+[gpt-oss-20b | commonsense | zh vs EN] Diff: +159.6 tokens. p-value: 1.85067e-67 ***
+[gpt-oss-20b | commonsense | ar vs EN] Diff: +151.8 tokens. p-value: 3.02915e-68 ***
+[gpt-oss-20b | commonsense | hi vs EN] Diff: +222.8 tokens. p-value: 1.42086e-76 ***
+[gpt-oss-20b | commonsense | fi vs EN] Diff: +205.0 tokens. p-value: 6.96903e-70 ***
+[gpt-oss-20b | commonsense | ko vs EN] Diff: +215.9 tokens. p-value: 3.07571e-75 ***
+[gpt-oss-20b | commonsense | sw vs EN] Diff: +249.4 tokens. p-value: 1.25463e-78 ***
+[gpt-oss-20b | commonsense | es vs EN] Diff: +228.5 tokens. p-value: 2.02217e-76 ***
+[gpt-oss-20b | commonsense | tr vs EN] Diff: +141.9 tokens. p-value: 8.70774e-63 ***
+[gpt-oss-20b | commonsense | de vs EN] Diff: +179.4 tokens. p-value: 5.45830e-72 ***
+[gpt-oss-20b | commonsense | fr vs EN] Diff: +193.1 tokens. p-value: 3.53164e-71 ***
+[gpt-oss-20b | math | zh vs EN] Diff: +129.9 tokens. p-value: 4.60440e-67 ***
+[gpt-oss-20b | math | ar vs EN] Diff: +165.6 tokens. p-value: 1.78029e-68 ***
+[gpt-oss-20b | math | hi vs EN] Diff: +173.7 tokens. p-value: 1.35791e-71 ***
+[gpt-oss-20b | math | fi vs EN] Diff: +168.7 tokens. p-value: 1.49155e-69 ***
+[gpt-oss-20b | math | ko vs EN] Diff: +177.4 tokens. p-value: 2.03384e-72 ***
+[gpt-oss-20b | math | sw vs EN] Diff: +203.4 tokens. p-value: 1.68520e-71 ***
+[gpt-oss-20b | math | es vs EN] Diff: +198.6 tokens. p-value: 7.66362e-73 ***
+[gpt-oss-20b | math | tr vs EN] Diff: +147.6 tokens. p-value: 7.71583e-66 ***
+[gpt-oss-20b | math | de vs EN] Diff: +161.0 tokens. p-value: 5.76540e-70 ***
+[gpt-oss-20b | math | fr vs EN] Diff: +161.5 tokens. p-value: 3.55600e-69 ***
+[llama3.1-8b | code | ar vs EN] Diff: +354.8 tokens. p-value: 2.51616e-35 ***
+[llama3.1-8b | code | hi vs EN] Diff: +365.2 tokens. p-value: 2.67255e-67 ***
+[llama3.1-8b | code | fi vs EN] Diff: +322.6 tokens. p-value: 2.28236e-64 ***
+[llama3.1-8b | code | ko vs EN] Diff: +393.3 tokens. p-value: 7.65494e-25 ***
+[llama3.1-8b | code | sw vs EN] Diff: +609.0 tokens. p-value: 1.83151e-67 ***
+[llama3.1-8b | code | es vs EN] Diff: +165.9 tokens. p-value: 1.01302e-63 ***
+[llama3.1-8b | code | tr vs EN] Diff: +368.9 tokens. p-value: 2.78939e-20 ***
+[llama3.1-8b | code | de vs EN] Diff: +159.6 tokens. p-value: 4.13426e-59 ***
+[llama3.1-8b | code | fr vs EN] Diff: +134.7 tokens. p-value: 1.00999e-58 ***
+[llama3.1-8b | commonsense | ar vs EN] Diff: +315.0 tokens. p-value: 8.35645e-23 ***
+[llama3.1-8b | commonsense | hi vs EN] Diff: +603.5 tokens. p-value: 3.93272e-82 ***
+[llama3.1-8b | commonsense | fi vs EN] Diff: +983.8 tokens. p-value: 5.65187e-72 ***
+[llama3.1-8b | commonsense | ko vs EN] Diff: +610.5 tokens. p-value: 8.66900e-39 ***
+[llama3.1-8b | commonsense | sw vs EN] Diff: +799.1 tokens. p-value: 3.00684e-70 ***
+[llama3.1-8b | commonsense | es vs EN] Diff: +87.7 tokens. p-value: 7.37299e-52 ***
+[llama3.1-8b | commonsense | tr vs EN] Diff: +420.1 tokens. p-value: 1.41884e-35 ***
+[llama3.1-8b | commonsense | de vs EN] Diff: +119.8 tokens. p-value: 1.35070e-68 ***
+[llama3.1-8b | commonsense | fr vs EN] Diff: +87.6 tokens. p-value: 4.11556e-35 ***
+[llama3.1-8b | math | zh vs EN] Diff: +37.9 tokens. p-value: 1.03424e-15 ***
+[llama3.1-8b | math | ar vs EN] Diff: +124.3 tokens. p-value: 4.01208e-11 ***
+[llama3.1-8b | math | hi vs EN] Diff: +631.2 tokens. p-value: 1.54446e-72 ***
+[llama3.1-8b | math | fi vs EN] Diff: +497.3 tokens. p-value: 1.67108e-36 ***
+[llama3.1-8b | math | ko vs EN] Diff: +136.0 tokens. p-value: 8.14839e-13 ***
+[llama3.1-8b | math | sw vs EN] Diff: +184.9 tokens. p-value: 2.12591e-47 ***
+[llama3.1-8b | math | es vs EN] Diff: +39.4 tokens. p-value: 2.17937e-08 ***
+[llama3.1-8b | math | tr vs EN] Diff: +582.5 tokens. p-value: 3.09669e-22 ***
+[llama3.1-8b | math | de vs EN] Diff: -2.5 tokens. p-value: 2.00793e-24 ***
+[llama3.1-8b | math | fr vs EN] Diff: +185.5 tokens. p-value: 3.34784e-22 ***
+[llama3.3-70b | code | zh vs EN] Diff: +136.5 tokens. p-value: 8.66891e-70 ***
+[llama3.3-70b | code | ar vs EN] Diff: +176.8 tokens. p-value: 9.53669e-79 ***
+[llama3.3-70b | code | hi vs EN] Diff: +368.3 tokens. p-value: 1.45079e-83 ***
+[llama3.3-70b | code | fi vs EN] Diff: +251.5 tokens. p-value: 1.11220e-82 ***
+[llama3.3-70b | code | ko vs EN] Diff: +158.7 tokens. p-value: 1.30386e-72 ***
+[llama3.3-70b | code | sw vs EN] Diff: +299.2 tokens. p-value: 3.95026e-83 ***
+[llama3.3-70b | code | es vs EN] Diff: +233.6 tokens. p-value: 9.24912e-82 ***
+[llama3.3-70b | code | tr vs EN] Diff: +157.6 tokens. p-value: 1.38914e-74 ***
+[llama3.3-70b | code | de vs EN] Diff: +273.1 tokens. p-value: 5.59050e-83 ***
+[llama3.3-70b | code | fr vs EN] Diff: +257.8 tokens. p-value: 4.54692e-83 ***
+[llama3.3-70b | commonsense | zh vs EN] Diff: -69.9 tokens. p-value: 9.33497e-44 ***
+[llama3.3-70b | commonsense | ar vs EN] Diff: -42.1 tokens. p-value: 1.49740e-20 ***
+[llama3.3-70b | commonsense | hi vs EN] Diff: +168.0 tokens. p-value: 2.01400e-71 ***
+[llama3.3-70b | commonsense | fi vs EN] Diff: +67.7 tokens. p-value: 6.10125e-33 ***
+[llama3.3-70b | commonsense | ko vs EN] Diff: -61.0 tokens. p-value: 4.98309e-34 ***
+[llama3.3-70b | commonsense | sw vs EN] Diff: +16.7 tokens. p-value: 1.18011e-02 *
+[llama3.3-70b | commonsense | es vs EN] Diff: +34.0 tokens. p-value: 3.60711e-15 ***
+[llama3.3-70b | commonsense | tr vs EN] Diff: -51.2 tokens. p-value: 5.59494e-28 ***
+[llama3.3-70b | commonsense | de vs EN] Diff: +83.9 tokens. p-value: 2.92406e-57 ***
+[llama3.3-70b | commonsense | fr vs EN] Diff: +33.6 tokens. p-value: 1.94989e-14 ***
+[llama3.3-70b | math | zh vs EN] Diff: -22.9 tokens. p-value: 9.62150e-17 ***
+[llama3.3-70b | math | ar vs EN] Diff: +9.0 tokens. p-value: 1.47030e-03 *
+[llama3.3-70b | math | hi vs EN] Diff: +191.5 tokens. p-value: 3.34989e-81 ***
+[llama3.3-70b | math | fi vs EN] Diff: +23.1 tokens. p-value: 5.71938e-15 ***
+[llama3.3-70b | math | ko vs EN] Diff: +6.5 tokens. p-value: 3.46881e-02 *
+[llama3.3-70b | math | sw vs EN] Diff: +79.0 tokens. p-value: 2.39727e-65 ***
+[llama3.3-70b | math | es vs EN] Diff: +40.3 tokens. p-value: 4.95476e-43 ***
+[llama3.3-70b | math | de vs EN] Diff: +55.6 tokens. p-value: 4.31305e-54 ***
+[llama3.3-70b | math | fr vs EN] Diff: +48.7 tokens. p-value: 2.90053e-54 ***
+[llama4-scout | code | zh vs EN] Diff: -513.1 tokens. p-value: 1.89237e-16 ***
+[llama4-scout | code | hi vs EN] Diff: -408.0 tokens. p-value: 6.35841e-09 ***
+[llama4-scout | code | ko vs EN] Diff: -509.1 tokens. p-value: 1.38109e-09 ***
+[llama4-scout | code | sw vs EN] Diff: -456.4 tokens. p-value: 3.78211e-09 ***
+[llama4-scout | code | es vs EN] Diff: -501.8 tokens. p-value: 4.98659e-07 ***
+[llama4-scout | code | tr vs EN] Diff: -575.7 tokens. p-value: 1.71694e-03 *
+[llama4-scout | code | de vs EN] Diff: -533.9 tokens. p-value: 3.33401e-02 *
+[llama4-scout | code | fr vs EN] Diff: -522.7 tokens. p-value: 1.88266e-03 *
+[llama4-scout | commonsense | zh vs EN] Diff: -45.1 tokens. p-value: 3.91794e-35 ***
+[llama4-scout | commonsense | ar vs EN] Diff: -13.1 tokens. p-value: 6.20792e-03 *
+[llama4-scout | commonsense | hi vs EN] Diff: +75.7 tokens. p-value: 1.12970e-55 ***
+[llama4-scout | commonsense | fi vs EN] Diff: -29.5 tokens. p-value: 1.58364e-11 ***
+[llama4-scout | commonsense | ko vs EN] Diff: -70.9 tokens. p-value: 5.16430e-52 ***
+[llama4-scout | commonsense | sw vs EN] Diff: +26.6 tokens. p-value: 4.64918e-09 ***
+[llama4-scout | commonsense | es vs EN] Diff: +19.9 tokens. p-value: 3.56784e-10 ***
+[llama4-scout | commonsense | tr vs EN] Diff: -56.8 tokens. p-value: 5.08644e-29 ***
+[llama4-scout | commonsense | de vs EN] Diff: +14.0 tokens. p-value: 4.40064e-05 ***
+[llama4-scout | commonsense | fr vs EN] Diff: +28.9 tokens. p-value: 1.60410e-13 ***
+[llama4-scout | math | zh vs EN] Diff: -60.2 tokens. p-value: 1.73242e-65 ***
+[llama4-scout | math | ar vs EN] Diff: -11.0 tokens. p-value: 2.14131e-03 *
+[llama4-scout | math | hi vs EN] Diff: +17.2 tokens. p-value: 2.01415e-06 ***
+[llama4-scout | math | fi vs EN] Diff: -39.1 tokens. p-value: 1.44918e-33 ***
+[llama4-scout | math | ko vs EN] Diff: -52.1 tokens. p-value: 5.12500e-51 ***
+[llama4-scout | math | es vs EN] Diff: -17.4 tokens. p-value: 1.09971e-07 ***
+[llama4-scout | math | tr vs EN] Diff: -61.5 tokens. p-value: 1.34833e-66 ***
+[llama4-scout | math | de vs EN] Diff: -24.6 tokens. p-value: 5.24119e-19 ***
+[llama4-scout | math | fr vs EN] Diff: -20.3 tokens. p-value: 3.55421e-12 ***
+
+==================================================
+3. SPEARMAN'S RANK CORRELATION (Fertility vs Accuracy)
+==================================================
+Purpose: Tests the strength of the relationship between token fertility and accuracy.
+[GLOBAL] Spearman's rho: 0.060, p-value: 4.45541e-01 
+[CODE] Spearman's rho: 0.141, p-value: 3.04605e-01 
+[COMMONSENSE] Spearman's rho: -0.168, p-value: 2.25755e-01 
+[MATH] Spearman's rho: 0.513, p-value: 6.24392e-05 ***
+
+==================================================
+4. TWO-WAY ANOVA (Model x Language Interaction on Token Bloat)
+==================================================
+Purpose: Tests if the 'token tax' (generating more tokens for foreign languages) disproportionately affects smaller models.
+Method: Runs Two-Way ANOVA on log(total_tokens) across all individual questions.
+
+--- ANOVA for CODE (27500 records) ---
+Interaction (Model x Language) p-value: 0.00000e+00 ***
+  => PROVEN: The token inflation from foreign languages is significantly worse for some models (likely smaller ones) than others!
+
+--- ANOVA for COMMONSENSE (27500 records) ---
+Interaction (Model x Language) p-value: 0.00000e+00 ***
+  => PROVEN: The token inflation from foreign languages is significantly worse for some models (likely smaller ones) than others!
+
+--- ANOVA for MATH (27500 records) ---
+Interaction (Model x Language) p-value: 4.57562e-254 ***
+  => PROVEN: The token inflation from foreign languages is significantly worse for some models (likely smaller ones) than others!
+
+
+==================================================
+All tests completed.
