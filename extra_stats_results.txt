@@ -171,9 +171,9 @@ Purpose: Tests if foreign languages use significantly more/less completion token
 3. SPEARMAN'S RANK CORRELATION (Fertility vs Accuracy)
 ==================================================
 Purpose: Tests the strength of the relationship between token fertility and accuracy.
-[GLOBAL] Spearman's rho: 0.060, p-value: 4.45541e-01 
-[CODE] Spearman's rho: 0.141, p-value: 3.04605e-01 
-[COMMONSENSE] Spearman's rho: -0.168, p-value: 2.25755e-01 
+[GLOBAL] Spearman's rho: 0.061, p-value: 4.39792e-01 
+[CODE] Spearman's rho: 0.142, p-value: 3.01871e-01 
+[COMMONSENSE] Spearman's rho: -0.162, p-value: 2.38393e-01 
 [MATH] Spearman's rho: 0.513, p-value: 6.24392e-05 ***
 
 ==================================================
